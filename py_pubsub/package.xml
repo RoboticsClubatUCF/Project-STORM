@@ -6,9 +6,10 @@
   <description>TODO: Package description</description>
   <maintainer email="lunarbotics@todo.todo">lunarbotics</maintainer>
   <license>Apache-2.0</license>
-  <exec_depend>rclpy</exec_depend>
+  <!-- dependencies that a code/node needs below -->
+  <exec_depend>rclpy</exec_depend> 
   <exec_depend>std_msgs</exec_depend>
-
+  <!-- -->
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
