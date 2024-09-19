@@ -19,7 +19,7 @@ setup(
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': [
+        'console_scripts': [# to associate a word like "talker" to a specific py file to run node
                 'talker = py_pubsub.publisher_member_function:main',
                 'listener = py_pubsub.subscriber_member_function:main',
         ],
