@@ -1,0 +1,181 @@
+[0.082s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--packages-select', 'cmd_vel_mux']
+[0.082s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=32, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=['cmd_vel_mux'], packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f76a603beb0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f76a603b7f0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f76a603b7f0>>)
+[0.182s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.182s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.182s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.182s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.182s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.182s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.182s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.188s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.189s] Level 1:colcon.colcon_core.package_identification:_identify(src/cmd_vel_mux) by extensions ['ignore', 'ignore_ament_install']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/cmd_vel_mux) by extension 'ignore'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/cmd_vel_mux) by extension 'ignore_ament_install'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/cmd_vel_mux) by extensions ['colcon_pkg']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/cmd_vel_mux) by extension 'colcon_pkg'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/cmd_vel_mux) by extensions ['colcon_meta']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/cmd_vel_mux) by extension 'colcon_meta'
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/cmd_vel_mux) by extensions ['ros']
+[0.190s] Level 1:colcon.colcon_core.package_identification:_identify(src/cmd_vel_mux) by extension 'ros'
+[0.191s] DEBUG:colcon.colcon_core.package_identification:Package 'src/cmd_vel_mux' with type 'ros.ament_cmake' and name 'cmd_vel_mux'
+[0.191s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain) by extensions ['ignore', 'ignore_ament_install']
+[0.191s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain) by extension 'ignore'
+[0.191s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain) by extension 'ignore_ament_install'
+[0.191s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain) by extensions ['colcon_pkg']
+[0.191s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain) by extension 'colcon_pkg'
+[0.191s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain) by extensions ['colcon_meta']
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain) by extension 'colcon_meta'
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain) by extensions ['ros']
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain) by extension 'ros'
+[0.192s] DEBUG:colcon.colcon_core.package_identification:Package 'src/drivetrain' with type 'ros.ament_cmake' and name 'drivetrain'
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain_interfaces) by extensions ['ignore', 'ignore_ament_install']
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain_interfaces) by extension 'ignore'
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain_interfaces) by extension 'ignore_ament_install'
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain_interfaces) by extensions ['colcon_pkg']
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain_interfaces) by extension 'colcon_pkg'
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain_interfaces) by extensions ['colcon_meta']
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain_interfaces) by extension 'colcon_meta'
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain_interfaces) by extensions ['ros']
+[0.192s] Level 1:colcon.colcon_core.package_identification:_identify(src/drivetrain_interfaces) by extension 'ros'
+[0.193s] DEBUG:colcon.colcon_core.package_identification:Package 'src/drivetrain_interfaces' with type 'ros.ament_cmake' and name 'drivetrain_interfaces'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/joystick_control) by extensions ['ignore', 'ignore_ament_install']
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/joystick_control) by extension 'ignore'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/joystick_control) by extension 'ignore_ament_install'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/joystick_control) by extensions ['colcon_pkg']
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/joystick_control) by extension 'colcon_pkg'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/joystick_control) by extensions ['colcon_meta']
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/joystick_control) by extension 'colcon_meta'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/joystick_control) by extensions ['ros']
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/joystick_control) by extension 'ros'
+[0.193s] DEBUG:colcon.colcon_core.package_identification:Package 'src/joystick_control' with type 'ros.ament_cmake' and name 'joystick_control'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/motor_control) by extensions ['ignore', 'ignore_ament_install']
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/motor_control) by extension 'ignore'
+[0.193s] Level 1:colcon.colcon_core.package_identification:_identify(src/motor_control) by extension 'ignore_ament_install'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/motor_control) by extensions ['colcon_pkg']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/motor_control) by extension 'colcon_pkg'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/motor_control) by extensions ['colcon_meta']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/motor_control) by extension 'colcon_meta'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/motor_control) by extensions ['ros']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/motor_control) by extension 'ros'
+[0.194s] DEBUG:colcon.colcon_core.package_identification:Package 'src/motor_control' with type 'ros.ament_cmake' and name 'motor_control'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extensions ['ignore', 'ignore_ament_install']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extension 'ignore'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extension 'ignore_ament_install'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extensions ['colcon_pkg']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extension 'colcon_pkg'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extensions ['colcon_meta']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extension 'colcon_meta'
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extensions ['ros']
+[0.194s] Level 1:colcon.colcon_core.package_identification:_identify(src/robot_bringup) by extension 'ros'
+[0.195s] DEBUG:colcon.colcon_core.package_identification:Package 'src/robot_bringup' with type 'ros.ament_cmake' and name 'robot_bringup'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/sensor_processing) by extensions ['ignore', 'ignore_ament_install']
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/sensor_processing) by extension 'ignore'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/sensor_processing) by extension 'ignore_ament_install'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/sensor_processing) by extensions ['colcon_pkg']
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/sensor_processing) by extension 'colcon_pkg'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/sensor_processing) by extensions ['colcon_meta']
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/sensor_processing) by extension 'colcon_meta'
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/sensor_processing) by extensions ['ros']
+[0.195s] Level 1:colcon.colcon_core.package_identification:_identify(src/sensor_processing) by extension 'ros'
+[0.195s] DEBUG:colcon.colcon_core.package_identification:Package 'src/sensor_processing' with type 'ros.ament_cmake' and name 'sensor_processing'
+[0.195s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.195s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.195s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.195s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.195s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.210s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'drivetrain' in 'src/drivetrain'
+[0.210s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'drivetrain_interfaces' in 'src/drivetrain_interfaces'
+[0.210s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'motor_control' in 'src/motor_control'
+[0.210s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'robot_bringup' in 'src/robot_bringup'
+[0.210s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'sensor_processing' in 'src/sensor_processing'
+[0.210s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'joystick_control' in 'src/joystick_control'
+[0.211s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.211s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.212s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 271 installed packages in /opt/ros/humble
+[0.213s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.230s] Level 5:colcon.colcon_core.verb:set package 'cmd_vel_mux' build argument 'cmake_args' from command line to 'None'
+[0.230s] Level 5:colcon.colcon_core.verb:set package 'cmd_vel_mux' build argument 'cmake_target' from command line to 'None'
+[0.231s] Level 5:colcon.colcon_core.verb:set package 'cmd_vel_mux' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.231s] Level 5:colcon.colcon_core.verb:set package 'cmd_vel_mux' build argument 'cmake_clean_cache' from command line to 'False'
+[0.231s] Level 5:colcon.colcon_core.verb:set package 'cmd_vel_mux' build argument 'cmake_clean_first' from command line to 'False'
+[0.231s] Level 5:colcon.colcon_core.verb:set package 'cmd_vel_mux' build argument 'cmake_force_configure' from command line to 'False'
+[0.231s] Level 5:colcon.colcon_core.verb:set package 'cmd_vel_mux' build argument 'ament_cmake_args' from command line to 'None'
+[0.231s] Level 5:colcon.colcon_core.verb:set package 'cmd_vel_mux' build argument 'catkin_cmake_args' from command line to 'None'
+[0.231s] Level 5:colcon.colcon_core.verb:set package 'cmd_vel_mux' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.231s] DEBUG:colcon.colcon_core.verb:Building package 'cmd_vel_mux' with the following arguments: {'ament_cmake_args': None, 'build_base': '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux', 'merge_install': False, 'path': '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/src/cmd_vel_mux', 'symlink_install': False, 'test_result_base': None}
+[0.231s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.232s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.232s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/src/cmd_vel_mux' with build type 'ament_cmake'
+[0.232s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/src/cmd_vel_mux'
+[0.233s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.233s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.233s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.240s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux': CMAKE_PREFIX_PATH=/opt/ros/humble CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/src/cmd_vel_mux -DCMAKE_INSTALL_PREFIX=/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux
+[1.240s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/src/cmd_vel_mux -DCMAKE_INSTALL_PREFIX=/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux
+[1.254s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(cmd_vel_mux)
+[1.257s] Level 1:colcon.colcon_core.environment:checking '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux' for CMake module files
+[1.258s] Level 1:colcon.colcon_core.environment:checking '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux' for CMake config files
+[1.260s] Level 1:colcon.colcon_core.environment:checking '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/bin'
+[1.260s] Level 1:colcon.colcon_core.environment:checking '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/lib/pkgconfig/cmd_vel_mux.pc'
+[1.260s] Level 1:colcon.colcon_core.environment:checking '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/lib/python3.10/site-packages'
+[1.261s] Level 1:colcon.colcon_core.environment:checking '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/bin'
+[1.261s] INFO:colcon.colcon_core.shell:Creating package script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/package.ps1'
+[1.263s] INFO:colcon.colcon_core.shell:Creating package descriptor '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/package.dsv'
+[1.264s] INFO:colcon.colcon_core.shell:Creating package script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/package.sh'
+[1.265s] INFO:colcon.colcon_core.shell:Creating package script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/package.bash'
+[1.266s] INFO:colcon.colcon_core.shell:Creating package script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/package.zsh'
+[1.266s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/colcon-core/packages/cmd_vel_mux)
+[1.277s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[1.277s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[1.277s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '1'
+[1.277s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[1.283s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[1.283s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[1.283s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[1.291s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[1.292s] INFO:colcon.colcon_core.shell:Creating prefix script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/local_setup.ps1'
+[1.293s] INFO:colcon.colcon_core.shell:Creating prefix util module '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/_local_setup_util_ps1.py'
+[1.294s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/setup.ps1'
+[1.295s] INFO:colcon.colcon_core.shell:Creating prefix script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/local_setup.sh'
+[1.295s] INFO:colcon.colcon_core.shell:Creating prefix util module '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/_local_setup_util_sh.py'
+[1.296s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/setup.sh'
+[1.296s] INFO:colcon.colcon_core.shell:Creating prefix script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/local_setup.bash'
+[1.296s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/setup.bash'
+[1.297s] INFO:colcon.colcon_core.shell:Creating prefix script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/local_setup.zsh'
+[1.297s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/setup.zsh'
