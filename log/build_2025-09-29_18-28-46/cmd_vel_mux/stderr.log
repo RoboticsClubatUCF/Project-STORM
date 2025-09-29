@@ -1,0 +1,17 @@
+[31mCMake Error at CMakeLists.txt:55 (find_package):
+  By not providing "Findros_testing.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "ros_testing", but CMake did not find one.
+
+  Could not find a package configuration file provided by "ros_testing" with
+  any of the following names:
+
+    ros_testingConfig.cmake
+    ros_testing-config.cmake
+
+  Add the installation prefix of "ros_testing" to CMAKE_PREFIX_PATH or set
+  "ros_testing_DIR" to a directory containing one of the above files.  If
+  "ros_testing" provides a separate development package or SDK, be sure it
+  has been installed.
+
+[0m

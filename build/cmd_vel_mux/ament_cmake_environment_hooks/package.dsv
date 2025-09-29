@@ -1,0 +1,4 @@
+source;share/cmd_vel_mux/local_setup.bash
+source;share/cmd_vel_mux/local_setup.dsv
+source;share/cmd_vel_mux/local_setup.sh
+source;share/cmd_vel_mux/local_setup.zsh

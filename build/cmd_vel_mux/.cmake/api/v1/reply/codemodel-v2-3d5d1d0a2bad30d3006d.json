@@ -1,0 +1,88 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-8660174bbb357362c34b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "cmd_vel_mux",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "cmd_vel_mux::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cmd_vel_mux-5195b1b3748b40ada4b3.json",
+					"name" : "cmd_vel_mux",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "cmd_vel_mux_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cmd_vel_mux_node-9334837d7398881132c3.json",
+					"name" : "cmd_vel_mux_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "cmd_vel_mux_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cmd_vel_mux_uninstall-7e444db417b60f910faa.json",
+					"name" : "cmd_vel_mux_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-12a65a6c884df59087bf.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux",
+		"source" : "/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/src/cmd_vel_mux"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

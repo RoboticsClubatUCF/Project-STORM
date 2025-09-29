@@ -1,0 +1,56 @@
+[0.008s] Invoking command in '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux': CMAKE_PREFIX_PATH=/opt/ros/humble CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/src/cmd_vel_mux -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux
+[0.019s] -- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+[0.119s] -- Found geometry_msgs: 4.9.0 (/opt/ros/humble/share/geometry_msgs/cmake)
+[0.134s] -- Found rosidl_generator_c: 3.1.7 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.135s] -- Found rosidl_adapter: 3.1.7 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.138s] -- Found rosidl_generator_cpp: 3.1.7 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.142s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.149s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.168s] -- Found rcl_interfaces: 1.2.2 (/opt/ros/humble/share/rcl_interfaces/cmake)
+[0.174s] -- Found rclcpp: 16.0.15 (/opt/ros/humble/share/rclcpp/cmake)
+[0.181s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.182s] -- Found rmw_fastrtps_cpp: 6.2.8 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.247s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.271s] -- Found rclcpp_components: 16.0.15 (/opt/ros/humble/share/rclcpp_components/cmake)
+[0.367s] -- Configuring done
+[0.389s] -- Generating done
+[0.395s] -- Build files have been written to: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux
+[0.404s] Invoked command in '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/src/cmd_vel_mux -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux
+[0.405s] Invoking command in '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux': CMAKE_PREFIX_PATH=/opt/ros/humble CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake --build /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux -- -j32 -l32
+[0.474s] [ 50%] [32mBuilding CXX object CMakeFiles/cmd_vel_mux.dir/src/cmd_vel_mux.cpp.o[0m
+[0.474s] [ 50%] [32mBuilding CXX object CMakeFiles/cmd_vel_mux_node.dir/rclcpp_components/node_main_cmd_vel_mux_node.cpp.o[0m
+[2.279s] [ 75%] [32m[1mLinking CXX executable cmd_vel_mux_node[0m
+[2.380s] [ 75%] Built target cmd_vel_mux_node
+[5.574s] [100%] [32m[1mLinking CXX shared library libcmd_vel_mux.so[0m
+[5.935s] [100%] Built target cmd_vel_mux
+[5.947s] Invoked command in '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake --build /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux -- -j32 -l32
+[5.955s] Invoking command in '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux': CMAKE_PREFIX_PATH=/opt/ros/humble CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake --install /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux
+[5.961s] -- Install configuration: ""
+[5.961s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/lib/cmd_vel_mux/cmd_vel_mux_node
+[5.964s] -- Set runtime path of "/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/lib/cmd_vel_mux/cmd_vel_mux_node" to ""
+[5.965s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/lib/libcmd_vel_mux.so
+[5.997s] -- Set runtime path of "/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/lib/libcmd_vel_mux.so" to ""
+[5.997s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/include/cmd_vel_mux
+[5.998s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/include/cmd_vel_mux/cmd_vel_mux.hpp
+[5.998s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/config
+[5.998s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/config/cmd_vel_mux_params.yaml
+[5.998s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/launch
+[5.998s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/launch/cmd_vel_mux-composed-launch.py
+[5.998s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/launch/cmd_vel_mux-launch.py
+[5.998s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/ament_index/resource_index/package_run_dependencies/cmd_vel_mux
+[5.998s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/ament_index/resource_index/parent_prefix_path/cmd_vel_mux
+[5.999s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/environment/ament_prefix_path.sh
+[5.999s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/environment/ament_prefix_path.dsv
+[5.999s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/environment/path.sh
+[5.999s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/environment/path.dsv
+[5.999s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/local_setup.bash
+[6.000s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/local_setup.sh
+[6.000s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/local_setup.zsh
+[6.000s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/local_setup.dsv
+[6.000s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/package.dsv
+[6.001s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/ament_index/resource_index/packages/cmd_vel_mux
+[6.001s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/ament_index/resource_index/rclcpp_components/cmd_vel_mux
+[6.001s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/cmake/cmd_vel_muxConfig.cmake
+[6.002s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/cmake/cmd_vel_muxConfig-version.cmake
+[6.002s] -- Installing: /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/install/cmd_vel_mux/share/cmd_vel_mux/package.xml
+[6.003s] Invoked command in '/mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble CONDA_PROMPT_MODIFIER=(base) /usr/bin/cmake --install /mnt/Storage02/SoftwareDev/Project STORM/Project-STORM/build/cmd_vel_mux

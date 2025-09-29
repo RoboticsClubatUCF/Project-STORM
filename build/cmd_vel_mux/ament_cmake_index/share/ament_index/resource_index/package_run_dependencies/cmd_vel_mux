@@ -1,0 +1,1 @@
+geometry_msgs;rcl_interfaces;rclcpp;rclcpp_components;rcpputils;std_msgs;ament_cmake_cppcheck;ament_cmake_cpplint;ament_cmake_flake8;ament_cmake_lint_cmake;ament_cmake_pep257;ament_cmake_uncrustify;ament_cmake_xmllint;ament_lint_auto;ros_testing
