@@ -1,7 +1,0 @@
-# Ignore ROS2 build, install, and log directories
-/build/
-/install/
-/logs/
-
-Dockerfile
-docker-compose.yml
