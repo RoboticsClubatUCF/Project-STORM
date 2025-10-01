@@ -1,0 +1,11 @@
+services:
+  ros:
+    build: .
+    working_dir: /Project-STORM
+    volumes:
+      - ./:/Project-STORM
+    stdin_open: true
+    tty: true
+    network_mode: host
+    environment:
+      - RMW_IMPLEMENTATION=rmw_fastrtps_cpp
