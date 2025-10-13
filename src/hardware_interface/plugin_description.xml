@@ -1,0 +1,10 @@
+<library path="hardware_interface">
+    <class
+            name="hardware_interface/DrivetrainHardware"
+            type="hardware_interface::DrivetrainHardware"
+            base_class_type="hardware_interface::SystemInterface">
+        <description>
+            Hardware interface for controlling drivetrain motors using Spark MAX controllers over CAN.
+        </description>
+    </class>
+</library>

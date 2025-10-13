@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>drivetrain_hardware</name>
+  <version>0.1.0</version>
+  <description>ROS 2 hardware interface for drivetrain motors using SparkCAN.</description>
+
+  <!-- Author / Maintainer -->
+  <maintainer email="ethan.wood@rccf.club">Ethan Wood</maintainer>
+  <license>Apache-2.0</license>
+
+  <!-- Dependencies required for build and runtime -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Core ROS 2 and hardware interface dependencies -->
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+
+  <!-- SparkCAN library -->
+  <exec_depend>sparkcan</exec_depend>
+
+  <!-- For building tests, optional -->
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <!-- Export info for pluginlib -->
+  <export>
+    <build_type>ament_cmake</build_type>
+
+    <!-- Plugin description file (lets controller_manager find your hardware) -->
+    <hardware_interface plugin="${prefix}/share/${PROJECT_NAME}/plugin_description.xml" />
+  </export>
+</package>
