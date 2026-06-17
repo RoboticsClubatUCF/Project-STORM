@@ -1,0 +1,10 @@
+<library path="spark_can_hardware">
+  <class name="storm_teleop/SparkCanHardware"
+         type="storm_teleop::SparkCanHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      ros2_control hardware interface for 6× REV SPARK MAX motor controllers
+      via sparkcan (Linux SocketCAN). Designed for a 6-wheel skid-steer rover.
+    </description>
+  </class>
+</library>

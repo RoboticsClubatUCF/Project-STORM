@@ -1,0 +1,80 @@
+# controllers.yaml — loaded by controller_manager (ros2_control_node)
+
+controller_manager:
+  ros__parameters:
+    update_rate: 50  # Hz — hardware read/write loop rate
+
+    # Declare which controllers exist (controller_manager loads them by name)
+    diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+
+diff_drive_controller:
+  ros__parameters:
+    # Wheel joints
+    # 3 per side, all commanded with the same velocity by diff_drive_controller
+    left_wheel_names:
+      - front_left_wheel_joint
+      - middle_left_wheel_joint
+      - back_left_wheel_joint
+    right_wheel_names:
+      - front_right_wheel_joint
+      - middle_right_wheel_joint
+      - back_right_wheel_joint
+
+    # Kinematics
+    wheel_separation: 0.8636   # 34 inches center-to-center
+    wheel_radius:     0.09525  # 3.75 inches
+
+    # Multipliers (set to 1.0; tune if odometry drifts)
+    wheel_separation_multiplier: 1.0
+    left_wheel_radius_multiplier: 1.0
+    right_wheel_radius_multiplier: 1.0
+
+    # Input topic mode
+    # diff_drive_controller defaults to TwistStamped on ~/cmd_vel.
+    # teleop_twist_joy publishes plain Twist, so subscribe to ~/cmd_vel_unstamped
+    # instead. The launch file remaps teleop's cmd_vel to this topic.
+    use_stamped_vel: false
+
+    # Command timeout (SAFETY)
+    # If no /cmd_vel arrives within this window, command zero velocity.
+    # This is the comms-loss failsafe: if WiFi drops (future base-station
+    # setup), the rover stops within 0.5 s.
+    cmd_vel_timeout: 0.5  # seconds
+
+    # Odometry
+    publish_rate: 50.0               # Hz for /odom
+    odom_frame_id: odom
+    base_frame_id: base_link
+    pose_covariance_diagonal:   [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+    twist_covariance_diagonal:  [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+
+    # Publish odom --> base_link TF
+    enable_odom_tf: true
+
+    # Use open-loop odometry (integrate commands, not encoder feedback).
+    open_loop: false
+
+    # Velocity limits
+    # These are the controller's internal clamps. They should match or
+    # exceed teleop limits so the controller doesn't silently eat commands.
+
+    # Physics ceiling with 81:1 gearing + NEO V1.1:
+    #   max linear  ≈ 0.70 m/s   (5676 RPM / 81 → wheel rad/s × radius)
+    #   max angular ≈ 1.62 rad/s  (pure point-turn, both sides at max)
+
+    # We clamp slightly below theoretical max to leave PID headroom.
+    linear.x.has_velocity_limits: true
+    linear.x.max_velocity:  0.6     # m/s — hard ceiling
+    linear.x.has_acceleration_limits: true
+    linear.x.max_acceleration: 1.0  # m/s² — smooth ramp-up
+    linear.x.has_jerk_limits: false
+
+    angular.z.has_velocity_limits: true
+    angular.z.max_velocity:  1.4    # rad/s — hard ceiling
+    angular.z.has_acceleration_limits: true
+    angular.z.max_acceleration: 2.0 # rad/s²
+    angular.z.has_jerk_limits: false

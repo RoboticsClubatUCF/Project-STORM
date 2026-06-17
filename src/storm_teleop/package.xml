@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>storm_teleop</name>
+  <version>0.1.0</version>
+  <description>URC rover teleop package: joystick → diff_drive_controller → SPARK MAX via CAN</description>
+  <maintainer email="todo@todo.com">TODO</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Hardware interface plugin -->
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+
+  <!-- Controllers -->
+  <depend>controller_manager</depend>
+  <depend>diff_drive_controller</depend>
+  <depend>joint_state_broadcaster</depend>
+
+  <!-- Teleop -->
+  <depend>joy</depend>
+  <depend>teleop_twist_joy</depend>
+
+  <!-- URDF / description -->
+  <depend>robot_state_publisher</depend>
+  <depend>xacro</depend>
+  <depend>urdf</depend>
+
+  <!-- sparkcan is a system library installed via PPA, not a ROS package. -->
+  <!-- <build_depend>sparkcan</build_depend> -->
+
+  <export>
+    <build_type>ament_cmake</build_type>
+    <!-- Tells pluginlib where to find our hardware interface plugin -->
+    <hardware_interface plugin="${prefix}/spark_can_hardware.xml"/>
+  </export>
+</package>

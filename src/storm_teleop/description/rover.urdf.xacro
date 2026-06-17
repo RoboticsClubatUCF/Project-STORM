@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="urc_rover">
+
+  <!-- All units: meters, kg, radians -->
+
+  <!-- Chassis: simple box -->
+  <xacro:property name="chassis_length" value="0.60"/>
+  <xacro:property name="chassis_width"  value="0.50"/>
+  <xacro:property name="chassis_height" value="0.20"/>
+  <xacro:property name="chassis_mass"   value="25.0"/>
+
+  <!-- Wheels -->
+  <xacro:property name="wheel_radius"     value="0.09525"/>   <!-- 3.75 in -->
+  <xacro:property name="wheel_width"      value="0.05"/>
+  <xacro:property name="wheel_mass"       value="0.5"/>
+  <xacro:property name="wheel_separation" value="0.8636"/>    <!-- 34 in center to center -->
+
+  <!-- Wheel Y offset from base_link center (half track width) -->
+  <xacro:property name="wheel_y_offset" value="${wheel_separation / 2.0}"/>
+
+  <!-- Wheel X positions (front/middle/back), measured from base_link center -->
+  <xacro:property name="wheel_x_front"  value="0.20"/>
+  <xacro:property name="wheel_x_middle" value="0.00"/>
+  <xacro:property name="wheel_x_back"   value="-0.20"/>
+
+  <!-- Chassis sits so wheel axles are at ground level (z=0 at ground) -->
+  <xacro:property name="chassis_z_offset" value="${wheel_radius + chassis_height / 2.0}"/>
+
+
+  <!-- INERTIA MACROS -->
+
+  <xacro:macro name="box_inertia" params="m x y z">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(y*y+z*z)/12}" ixy="0" ixz="0"
+               iyy="${m*(x*x+z*z)/12}" iyz="0"
+               izz="${m*(x*x+y*y)/12}"/>
+    </inertial>
+  </xacro:macro>
+
+  <xacro:macro name="cylinder_inertia" params="m r l">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(3*r*r+l*l)/12}" ixy="0" ixz="0"
+               iyy="${m*(3*r*r+l*l)/12}" iyz="0"
+               izz="${m*r*r/2}"/>
+    </inertial>
+  </xacro:macro>
+
+
+  <!-- WHEEL MACRO -->
+
+  <xacro:macro name="wheel" params="name x_pos y_pos">
+    <link name="${name}_link">
+      <visual>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+        <material name="dark_grey">
+          <color rgba="0.2 0.2 0.2 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertia m="${wheel_mass}" r="${wheel_radius}" l="${wheel_width}"/>
+    </link>
+
+    <joint name="${name}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${name}_link"/>
+      <!-- Wheel cylinder axis is Z in its own frame; we rotate so it aligns
+           with the Y axis of base_link (the axle direction). -->
+      <origin xyz="${x_pos} ${y_pos} 0.0" rpy="${-pi/2} 0 0"/>
+      <axis xyz="0 0 1"/>
+    </joint>
+  </xacro:macro>
+
+  <!--  LINKS & JOINTS  -->
+
+  <!-- base_link: at wheel-axle height, center of chassis footprint -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 ${chassis_height / 2.0}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.1 0.3 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${chassis_height / 2.0}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
+      </geometry>
+    </collision>
+    <xacro:box_inertia m="${chassis_mass}"
+                       x="${chassis_length}"
+                       y="${chassis_width}"
+                       z="${chassis_height}"/>
+  </link>
+
+  <!-- base_footprint: on the ground directly below base_link (for nav) -->
+  <link name="base_footprint"/>
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- 6 wheels -->
+  <!-- Right side (positive Y = left in ROS, but your track has right = negative Y
+       when looking from behind — adjust sign convention to match your physical robot.
+       Standard ROS: X forward, Y left, Z up. So right = -Y. -->
+  <xacro:wheel name="front_right_wheel"  x_pos="${wheel_x_front}"  y_pos="${-wheel_y_offset}"/>
+  <xacro:wheel name="middle_right_wheel" x_pos="${wheel_x_middle}" y_pos="${-wheel_y_offset}"/>
+  <xacro:wheel name="back_right_wheel"   x_pos="${wheel_x_back}"   y_pos="${-wheel_y_offset}"/>
+
+  <!-- Left side -->
+  <xacro:wheel name="front_left_wheel"   x_pos="${wheel_x_front}"  y_pos="${wheel_y_offset}"/>
+  <xacro:wheel name="middle_left_wheel"  x_pos="${wheel_x_middle}" y_pos="${wheel_y_offset}"/>
+  <xacro:wheel name="back_left_wheel"    x_pos="${wheel_x_back}"   y_pos="${wheel_y_offset}"/>
+
+  <!-- ROS2_CONTROL -->
+
+  <!--
+    This block tells controller_manager to load SparkCanHardware and wire
+    each joint's velocity command / position+velocity state interfaces.
+
+    Hardware-level params are read by on_init() in spark_can_hardware.cpp.
+    Per-joint params (can_id, inverted) are read from info_.joints[i].parameters.
+  -->
+
+  <ros2_control name="SparkCanSystem" type="system">
+    <hardware>
+      <plugin>storm_teleop/SparkCanHardware</plugin>
+      <param name="can_interface">can0</param>
+      <param name="gear_ratio">81.0</param>
+      <!-- SPARK MAX onboard velocity PID starting values.
+           kF = 1/free_speed_RPM ≈ 1/5676 for NEO V1.1.
+           Tune on real hardware — these are conservative first-pass values. -->
+      <param name="pid_kp">0.0001</param>
+      <param name="pid_ki">0.0</param>
+      <param name="pid_kd">0.0</param>
+      <param name="pid_kf">0.000176</param>
+    </hardware>
+
+    <!-- RIGHT SIDE (looking from behind the rover) -->
+    <joint name="back_right_wheel_joint">
+      <param name="can_id">1</param>
+      <param name="inverted">false</param>
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="middle_right_wheel_joint">
+      <param name="can_id">2</param>
+      <param name="inverted">false</param>
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="front_right_wheel_joint">
+      <param name="can_id">3</param>
+      <param name="inverted">false</param>
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <!-- LEFT SIDE -->
+    <joint name="front_left_wheel_joint">
+      <param name="can_id">4</param>
+      <param name="inverted">true</param>
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="middle_left_wheel_joint">
+      <param name="can_id">5</param>
+      <param name="inverted">true</param>
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="back_left_wheel_joint">
+      <param name="can_id">6</param>
+      <param name="inverted">true</param>
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+</robot>

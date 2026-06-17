@@ -1,0 +1,58 @@
+# joy_teleop.yaml — joy_node + teleop_twist_joy params
+#
+# Wired Xbox controller axis/button map on Linux (xpad driver):
+#
+#   Axes:                         Buttons:
+#     0  Left stick X               0  A   ← deadman (enable)
+#     1  Left stick Y               1  B
+#     2  Left trigger (1→-1)        2  X
+#     3  Right stick X              3  Y
+#     4  Right stick Y              4  LB
+#     5  Right trigger (1→-1)       5  RB  ← turbo
+#     6  D-pad X                    6  Back
+#     7  D-pad Y                    7  Start
+#                                   8  Xbox button
+#                                   9  Left stick click
+#                                  10  Right stick click
+#
+# Verify your mapping with:  ros2 run joy joy_node  then  ros2 topic echo /joy
+
+joy_node:
+  ros__parameters:
+    device_id: 0               # /dev/input/js0
+    deadzone: 0.1              # ignore stick drift below 10%
+    autorepeat_rate: 20.0      # Hz — republish even if stick is held steady
+    coalesce_interval_ms: 10   # merge events within 10 ms
+
+teleop_twist_joy_node:
+  ros__parameters:
+    # Stick axes
+    axis_linear:
+      x: 1                    # left stick Y  (push forward = positive)
+    axis_angular:
+      yaw: 0                  # left stick X  (push left = positive turn)
+
+    # Speed scales
+    # Normal mode (A held): gentle driving for precision tasks.
+    # Turbo mode  (A + RB held): near-max speed.
+    #
+    # Physics limits with 81:1 + NEO V1.1:
+    #   theoretical max linear  ≈ 0.70 m/s
+    #   theoretical max angular ≈ 1.62 rad/s
+    scale_linear:
+      x: 0.3                  # m/s — normal forward speed
+    scale_linear_turbo:
+      x: 0.6                  # m/s — turbo (≈86% of theoretical max)
+    scale_angular:
+      yaw: 0.7                # rad/s — normal turn rate
+    scale_angular_turbo:
+      yaw: 1.4                # rad/s — turbo turn rate
+
+    # Deadman / enable
+    # MUST hold A to move. Release = instant zero-velocity publish.
+    enable_button: 0           # A
+    enable_turbo_button: 5     # RB (hold BOTH A+RB for turbo)
+    require_enable_button: true
+
+    # Publish cmd_vel as unstamped Twist (matches diff_drive_controller default)
+    publish_stamped_twist: false
