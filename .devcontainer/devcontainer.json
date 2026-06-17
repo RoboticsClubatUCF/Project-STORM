@@ -21,7 +21,13 @@
       "extensions": [
         "ms-vscode.cmake-tools",
         "Ranch-Hand-Robotics.rde-ros-2",
-        "llvm-vs-code-extensions.vscode-clangd"
+        "llvm-vs-code-extensions.vscode-clangd",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "ms-python.vscode-python-envs",
+        "ms-vscode.cpptools",
+        "ms-vscode.cpp-devtools"
       ]
     }
   }
