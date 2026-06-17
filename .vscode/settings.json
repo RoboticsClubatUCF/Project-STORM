@@ -5,7 +5,6 @@
     "--compile-commands-dir=${workspaceFolder}/build",
     "--completion-style=detailed",
     "--clang-tidy",
-    "-std=c++23",
     "--clang-tidy-checks=-*,modernize*",
     "--header-insertion=never"
   ],

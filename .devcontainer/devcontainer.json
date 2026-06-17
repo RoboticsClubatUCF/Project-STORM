@@ -13,7 +13,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "gcc -v",
+	"postCreateCommand": "chmod +x ./devscripts/download_ros_pkgs.sh && ./devscripts/download_ros_pkgs.sh",
 
 	// Configure tool-specific properties.
 	"customizations": {

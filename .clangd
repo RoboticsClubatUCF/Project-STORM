@@ -1,0 +1,6 @@
+# Source - https://stackoverflow.com/a/73764030
+# Posted by Aaron Liu, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-06-17, License - CC BY-SA 4.0
+
+CompileFlags:
+  Add: [-std=c++20]
