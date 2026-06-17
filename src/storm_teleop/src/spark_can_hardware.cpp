@@ -140,8 +140,8 @@ hardware_interface::CallbackReturn SparkCanHardware::on_configure(
       // We do conversion in this code rather than on the SPARK, so leave
       // the SPARK's native units (RPM / rotations). This makes raw CAN
       // debugging easier, you see real motor RPM on the wire.
-      spark->SetVelocityConversionFactor(1.0);  // default
-      spark->SetPositionConversionFactor(1.0);  // default
+      wheel.spark->SetVelocityConversionFactor(1.0);  // default
+      wheel.spark->SetPositionConversionFactor(1.0);  // default
 
       //Onboard velocity PID
       // Slot 0 is the default control slot.

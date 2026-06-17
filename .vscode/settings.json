@@ -1,6 +1,14 @@
 {
   "clangd.enable": true,
   "C_Cpp.intelliSenseEngine": "disabled",
+  "clangd.arguments": [
+    "--compile-commands-dir=${workspaceFolder}/build",
+    "--completion-style=detailed",
+    "--clang-tidy",
+    "-std=c++23",
+    "--clang-tidy-checks=-*,modernize*",
+    "--header-insertion=never"
+  ],
   "ROS2.distro": "humble",
   "python.autoComplete.extraPaths": [
     "/opt/ros/humble/lib/python3.10/site-packages",
@@ -9,5 +17,6 @@
   "python.analysis.extraPaths": [
     "/opt/ros/humble/lib/python3.10/site-packages",
     "/opt/ros/humble/local/lib/python3.10/dist-packages"
-  ]
+  ],
+  "cmake.sourceDirectory": "/workspaces/Project-STORM/src/storm_teleop"
 }
