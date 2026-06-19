@@ -12,10 +12,10 @@
         "/usr/include/**"
       ],
       "name": "ros2",
-      "intelliSenseMode": "clang-x86",
-      "compilerPath": "/usr/bin/clang",
-      "cStandard": "c23",
-      "cppStandard": "c++23"
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++17"
     }
   ],
   "version": 4
