@@ -18,9 +18,13 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(JetsonGPIO REQUIRED)
 find_package(spdlog REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+
+file(GLOB SOURCES "src/*.cpp")
+add_executable(tegra-stepper-driver ${SOURCES})
+
+target_link_libraries(tegra-stepper-driver JetsonGPIO::JetsonGPIO spdlog::spdlog)
+
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
