@@ -7,22 +7,18 @@
 #include <thread>
 #include <time.h>
 
-int tegra_stepper::Stepper::ena_pin = -1;
-int tegra_stepper::Stepper::dir_pin = -1;
-int tegra_stepper::Stepper::pul_pin = -1;
-
 void tegra_stepper::Stepper::configure_pin() {
   GPIO::setmode(GPIO::BOARD);
 
-  GPIO::setup(ena_pin, GPIO::OUT);
-  GPIO::setup(dir_pin, GPIO::OUT);
-  GPIO::setup(pul_pin, GPIO::OUT);
+  GPIO::setup(info.ena_pin, GPIO::OUT);
+  GPIO::setup(info.dir_pin, GPIO::OUT);
+  GPIO::setup(info.pul_pin, GPIO::OUT);
 
-  GPIO::output(ena_pin, GPIO::LOW);
+  GPIO::output(info.ena_pin, GPIO::LOW);
 
   // Double check if its okay to start on HIGH for Direction.
-  GPIO::output(dir_pin, GPIO::LOW);
-  GPIO::output(pul_pin, GPIO::LOW);
+  GPIO::output(info.dir_pin, GPIO::LOW);
+  GPIO::output(info.pul_pin, GPIO::LOW);
 }
 
 void tegra_stepper::Stepper::setup(int frequency) {
@@ -34,12 +30,11 @@ void tegra_stepper::Stepper::setup(int steps_per_rev, int frequency) {
   this->frequency = frequency;
 }
 
-void tegra_stepper::Stepper::move(
-    std::reference_wrapper<int> steps, std::reference_wrapper<DIRECTION> dir,
-    std::reference_wrapper<GPIO::PWM> channel, std::reference_wrapper<int>
-        frequency) {
-  GPIO::output(dir_pin, dir.get() == DIRECTION::FORWARD ? GPIO::LOW : GPIO::HIGH);
-  GPIO::output(ena_pin, GPIO::HIGH);
+void tegra_stepper::Stepper::move(std::reference_wrapper<int> steps, std::reference_wrapper<ControllerInfo> info, std::reference_wrapper<DIRECTION> dir, std::reference_wrapper<GPIO::PWM> channel, std::reference_wrapper<int> frequency) {
+  ControllerInfo _info = info.get();
+
+  GPIO::output(_info.dir_pin, dir.get() == DIRECTION::FORWARD ? GPIO::LOW : GPIO::HIGH);
+  GPIO::output(_info.ena_pin, GPIO::HIGH);
 
   spdlog::info("Driver stepper in %s", ((dir.get() == DIRECTION::FORWARD)
                                            ? "forward"
@@ -47,17 +42,14 @@ void tegra_stepper::Stepper::move(
 
   GPIO::PWM &pwm = channel.get();
 
-  pwm.ChangeFrequency(frequency);
-  pwm.start(50);
+  for (int i = 0; i < steps.get(); ++i) {
+    GPIO::output(_info.pul_pin, GPIO::HIGH);
+    std::this_thread::sleep_for(std::chrono::microseconds(frequency.get()));
+    GPIO::output(_info.pul_pin, GPIO::LOW);
+    std::this_thread::sleep_for(std::chrono::microseconds(frequency.get()));
+  }
 
-  // for (int i = 0; i < steps.get(); ++i) {
-  //   GPIO::output(pul_pin, GPIO::HIGH);
-  //   std::this_thread::sleep_for(std::chrono::microseconds(frequency.get()));
-  //   GPIO::output(pul_pin, GPIO::LOW);
-  //   std::this_thread::sleep_for(std::chrono::microseconds(frequency.get()));
-  // }
-
-  GPIO::output(ena_pin, GPIO::LOW);
+  GPIO::output(_info.ena_pin, GPIO::LOW);
 }
 
 void tegra_stepper::Stepper::set(int steps, DIRECTION dir) {
