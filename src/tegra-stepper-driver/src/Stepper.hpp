@@ -1,5 +1,6 @@
 #include <JetsonGPIO.h>
 #include <JetsonGPIO/PWM.h>
+#include <JetsonGPIO/PublicEnums.h>
 #include <cstdint>
 #include <functional>
 #include <memory>
@@ -39,11 +40,13 @@ namespace tegra_stepper {
   public: 
     Stepper(int ena_pin, int dir_pin, int pul_pin) {
       this->info = ControllerInfo(ena_pin, dir_pin, pul_pin);
+      GPIO::setmode(GPIO::BOARD);
 
       pwm_channel = std::make_unique<GPIO::PWM>(GPIO::PWM(pul_pin, frequency));
     };
 
     ~Stepper() {
+      GPIO::cleanup();
     }
 
     void setup(int steps_per_rev, int frequency);
