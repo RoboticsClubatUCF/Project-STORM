@@ -29,15 +29,12 @@ namespace tegra_stepper {
     ControllerInfo info{0,0,0,};
     
     int steps_per_rev = 3200, frequency = 10000;
-    std::jthread exec_thread;
     std::unique_ptr<GPIO::PWM> pwm_channel;
 
     void configure_pin();
     static void move(std::reference_wrapper<int> steps,
                      std::reference_wrapper<ControllerInfo> info,
-                     std::reference_wrapper<DIRECTION> dir,
-                     std::reference_wrapper<GPIO::PWM> channel,
-                     std::reference_wrapper<int> frequency);
+                     std::reference_wrapper<DIRECTION> dir);
 
   public: 
     Stepper(int ena_pin, int dir_pin, int pul_pin) {
@@ -47,7 +44,6 @@ namespace tegra_stepper {
     };
 
     ~Stepper() {
-      exec_thread.request_stop();
     }
 
     void setup(int steps_per_rev, int frequency);
