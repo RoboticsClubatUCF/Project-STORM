@@ -1,9 +1,8 @@
-#include <JetsonGPIO.h>
-#include <JetsonGPIO/PWM.h>
-#include <JetsonGPIO/PublicEnums.h>
+#include <gpiod.h>
 #include <cstdint>
 #include <functional>
 #include <memory>
+#include <spdlog/spdlog.h>
 #include <thread>
 #include <threads.h>
 
@@ -28,11 +27,15 @@ namespace tegra_stepper {
   class Stepper {
     private:
     ControllerInfo info{0,0,0,};
-    
-    int steps_per_rev = 3200, frequency = 10000;
-    std::unique_ptr<GPIO::PWM> pwm_channel;
 
-    void configure_pin();
+    constexpr static const char *const chip_path = "/dev/gpiochip0";
+    static const unsigned int line_offset = 3;
+    gpiod_chip *chip_ptr;
+    gpiod_line *line;
+
+    int steps_per_rev = 3200, frequency = 10000;
+
+    void configure_pins();
     static void move(std::reference_wrapper<int> steps,
                      std::reference_wrapper<ControllerInfo> info,
                      std::reference_wrapper<DIRECTION> dir);
@@ -40,13 +43,25 @@ namespace tegra_stepper {
   public: 
     Stepper(int ena_pin, int dir_pin, int pul_pin) {
       this->info = ControllerInfo(ena_pin, dir_pin, pul_pin);
-      GPIO::setmode(GPIO::BOARD);
+      this->configure_pins();
 
-      pwm_channel = std::make_unique<GPIO::PWM>(GPIO::PWM(pul_pin, frequency));
+      chip_ptr = gpiod_chip_open(chip_path);
+      if (!chip_ptr) {
+        spdlog::error("failed to open chip: %s\n", strerror(errno));
+      }
+
+      line = gpiod_chip_get_line(chip_ptr, line_offset);
+      if (!line) {
+        spdlog::error("failed to open line: %s\n", strerror(errno));
+      }
     };
 
     ~Stepper() {
-      GPIO::cleanup();
+      // release the gpio line
+      gpiod_line_release(line);
+
+      // Close the gpio chip
+      gpiod_chip_close(chip_ptr);
     }
 
     void setup(int steps_per_rev, int frequency);

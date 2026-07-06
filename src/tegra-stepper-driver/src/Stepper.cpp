@@ -7,7 +7,7 @@
 #include <thread>
 #include <time.h>
 
-void tegra_stepper::Stepper::configure_pin() {
+void tegra_stepper::Stepper::configure_pins() {
   GPIO::setmode(GPIO::BOARD);
 
   GPIO::setup(info.ena_pin, GPIO::OUT);
