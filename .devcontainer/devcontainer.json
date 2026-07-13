@@ -1,75 +1,37 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/cpp
 {
-  "name": "Ubuntu",
-  "build": {
-    "dockerfile": "Dockerfile",
-    "args": { "VARIANT": "ubuntu-22.04" }
-  },
-  "runArgs": [
-    "--cap-add=SYS_PTRACE",
-    "--security-opt",
-    "seccomp=unconfined",
-    "--network=host",
-    "--privileged",
-    "--ipc=host",
-    "-e", "DISPLAY=${env:DISPLAY}",
-    "-e", "WAYLAND_DISPLAY=${env:WAYLAND_DISPLAY}",
-    "-e", "XDG_RUNTIME_DIR=${env:XDG_RUNTIME_DIR}",
-    "-e", "PULSE_SERVER=${env:PULSE_SERVER}",
-    // "-v", "/tmp/.X11-unix:/tmp/.X11-unix",
-    // "-v", "/mnt/wslg:/mnt/wslg",
-    "-v", "/dev/shm:/dev/shm"
-  ],
-  "remoteEnv": {
-    "HOST_PROJECT_PATH": "${localWorkspaceFolder}"
-  },
-  "extensions": [
-    "IBM.output-colorizer",
-    "oderwat.indent-rainbow",
-    "davidanson.vscode-markdownlint",
-    "eamodio.gitlens",
-    "eriklynd.json-tools",
-    "ms-python.python",
-    "ms-python.vscode-pylance",
-    "searking.preview-vscode",
-    "adamhartford.vscode-base64",
-    "shardulm94.trailing-spaces",
-    "saekiraku.pin-up",
-    "timonwong.shellcheck",
-    "maciejdems.terminal-sync",
-    "ms-iot.vscode-ros"
-  ],
-  "settings": {
-    "files.insertFinalNewline": true,
-    "terminal.integrated.profiles.linux": {
-      "zsh": {
-        "path": "/usr/bin/zsh"
-      }
-    },
-    "terminal.integrated.defaultProfile.linux": "zsh",
-    "ros.distro": "humble",
-    "editor.guides.bracketPairs": true
-  },
+	"name": "ROS",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
 
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
 
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  // "forwardPorts": [],
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
 
-  // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "chmod +x .devcontainer/post.sh && .devcontainer/post.sh",
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "chmod +x ./devscripts/download_ros_pkgs.sh && ./devscripts/download_ros_pkgs.sh",
 
-  // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-  "remoteUser": "vscode",
-  "features": {
-    "docker-from-docker": "latest",
-    // "kubectl-helm-minikube": {
-    // 	"version": "latest",
-    // 	"helm": "latest",
-    // 	"minikube": "none"
-    // },
-    "git": "os-provided"
-  },
-  "mounts": [
-    "source=${env:HOME}${env:USERPROFILE}/.ssh,target=/home/vscode/.ssh,type=bind,readonly",
-    "source=imp-zshhistory,target=/commandhistory,type=volume"
-  ]
+	// Configure tool-specific properties.
+	"customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cmake-tools",
+        "Ranch-Hand-Robotics.rde-ros-2",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "ms-python.vscode-python-envs",
+        "ms-vscode.cpptools",
+        "ms-vscode.cpp-devtools"
+      ]
+    }
+  }
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
 }
