@@ -8,6 +8,7 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
 
 # uncomment the following section in order to fill in
 # further dependencies manually.
@@ -27,7 +28,7 @@ endif()
 
 add_executable(storm_internal src/drivetrain.cpp)
 
-ament_target_dependencies(storm_internal rclcpp)
+ament_target_dependencies(storm_internal rclcpp std_msgs)
 
 install(TARGETS storm_internal DESTINATION lib/${PROJECT_NAME})
 
