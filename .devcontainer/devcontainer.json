@@ -11,7 +11,9 @@
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-  "runArgs": [],
+  "runArgs": ["--ipc=host","--network=host"],
+
+  "forwardPorts": [8765],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "chmod +x ./devscripts/download_ros_pkgs.sh && ./devscripts/download_ros_pkgs.sh",
