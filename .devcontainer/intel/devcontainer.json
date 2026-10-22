@@ -1,9 +1,9 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/cpp
 {
-  "name": "ROS",
+  "name": "ROS Environment INTEL",
   "build": {
-    "dockerfile": "Dockerfile"
+    "dockerfile": "../Dockerfile"
   },
   // 1. Mount the Wayland Socket and GPU rendering devices consistency=cached
   "mounts": [
@@ -11,8 +11,6 @@
   ],
   // Features to add to the dev container. More info: https://containers.dev/features.
   // "features": {},
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  // "forwardPorts": [],
   "runArgs": [
     "--ipc=host",
     "--network=host",
