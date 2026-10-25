@@ -6,6 +6,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
       ros-${ROS_DISTRO}-joy \
       ros-${ROS_DISTRO}-foxglove-bridge \
       joystick \
+      iproute2 \
+      iputils-ping \
+      network-manager \
     && rm -rf /var/lib/apt/lists/*
 
 FROM base AS dev
@@ -32,4 +35,5 @@ FROM base AS runtime
 COPY src/storm_basestation /ws/src/storm_basestation
 COPY src/storm_teleop/config/joy_teleop.yaml /ws/src/storm_teleop/config/joy_teleop.yaml
 WORKDIR /ws
-CMD ["ros2", "launch", "/ws/src/storm_basestation/launch/base_station.launch.py"]
+# Link check result goes to the logs; joy_node starts either way
+CMD ["bash", "-c", "/ws/src/storm_basestation/scripts/check_link.sh || true; exec ros2 launch /ws/src/storm_basestation/launch/base_station.launch.py"]

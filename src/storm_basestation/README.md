@@ -27,20 +27,36 @@ Needs `ros-humble-foxglove-bridge` (`rosdep install` picks it up).
 
 ## Network
 
-The bridge radios are a transparent link, so give both Jetsons static
-addresses on the same subnet over their Ethernet ports, e.g.:
+Everything on the radio link has a static address on 192.168.1.0/24, listed
+in `config/network.env`:
+
+| Device | IP |
+|--------|----|
+| Rover Jetson | 192.168.1.50 |
+| Base Jetson | 192.168.1.60 |
+| Rover radio | 192.168.1.21 |
+| Base radio | 192.168.1.20 |
+
+The radios are a transparent link, so set the Jetsons' Ethernet ports to
+their addresses. On the rover:
 
 ```bash
-# rover
 sudo nmcli con add type ethernet ifname eth0 con-name storm-link \
   ipv4.method manual ipv4.addresses 192.168.1.50/24
-# base station
-sudo nmcli con add type ethernet ifname eth0 con-name storm-link \
-  ipv4.method manual ipv4.addresses 192.168.1.20/24
 ```
 
-Use whatever subnet the radios' management pages aren't on. Check the port
-name with `nmcli dev`; on some Jetsons it isn't `eth0`.
+On the base Jetson, `scripts/link_up.sh` creates the same `storm-link`
+profile from `network.env`, routes multicast out the radio port and keeps the
+default route on WiFi. The Docker setup runs it on every `up`; natively:
+
+```bash
+sudo scripts/link_up.sh
+```
+
+It's safe to re-run and only bounces the link when something changed. If
+the Jetson has more than one Ethernet port, set `LINK_IFACE` in
+`network.env` (`nmcli dev` lists them). If an IP changes, update
+`config/network.env` and `config/fastdds_peers.xml`.
 
 Then start the hotspot on the base Jetson's WiFi (once; it comes back at boot):
 
@@ -52,10 +68,23 @@ sudo PASSWORD=<8+ chars> BAND=a scripts/hotspot_up.sh     # 5 GHz
 Laptops on `STORM-BASE` get a 10.42.0.x address and are NATed to the rover, so
 `ws://192.168.1.50:8765` works from the laptop as-is.
 
+### Checking the link
+
+With the rover running, check every layer from the base Jetson (interface,
+multicast, ping to each radio and the rover, bridge port, DDS discovery of
+the rover's teleop node):
+
+```bash
+scripts/check_link.sh
+docker compose run --rm basestation /ws/src/storm_basestation/scripts/check_link.sh   # in Docker
+```
+
+The basestation container also runs it at startup; see
+`docker compose logs basestation`.
+
 ### DDS discovery without multicast
 
-If `ros2 multicast send` on one machine never reaches `ros2 multicast receive`
-on the other, the radios are dropping multicast. Either enable multicast
+If `check_link.sh` reports that the radios drop multicast, either enable multicast
 pass-through in the radio settings, or use unicast peers on **both** machines:
 
 ```bash
@@ -64,8 +93,8 @@ source ~/.bashrc
 ros2 daemon stop
 ```
 
-Then restart any running launch. `config/fastdds_peers.xml` lists the rover
-(192.168.1.50) and base station (192.168.1.20); edit it if either IP changes.
+Then restart any running launch. `config/fastdds_peers.xml` lists the two
+Jetsons from `config/network.env`.
 
 ## Base Jetson
 
@@ -84,7 +113,8 @@ To serve storm-dashboard to laptops, see `storm-dashboard/README.md`.
 ### Docker
 
 Instead of the launch above and the dashboard's systemd unit, the base Jetson
-can run both in containers that restart at boot:
+can run both in containers that restart at boot. A one-shot `netsetup`
+container runs `link_up.sh` first through the host's NetworkManager:
 
 ```bash
 cd .devcontainer/basestation
@@ -115,10 +145,13 @@ Join `STORM-BASE`, then either:
 | File | What it does |
 |------|--------------|
 | `config/foxglove_bridge.yaml` | Port, topic whitelist, read-only capabilities |
+| `config/network.env` | Static IPs of the Jetsons and radios |
 | `config/fastdds_peers.xml` | Unicast DDS discovery between rover and base station |
 | `launch/bridge.launch.py` | foxglove_bridge (rover) |
 | `launch/base_station.launch.py` | joy_node with `storm_teleop/config/joy_teleop.yaml` (base Jetson) |
 | `lichtblick/storm_layout.json` | 3D + URDF, diagnostics, battery and computer plots |
 | `scripts/hotspot_up.sh` | WiFi hotspot on the base Jetson, NAT to the rover |
+| `scripts/link_up.sh` | Static IP on the base Jetson's radio port (NetworkManager) |
+| `scripts/check_link.sh` | Checks the link, multicast and DDS discovery of the rover |
 
 To show another topic in Lichtblick, add it to `topic_whitelist`.

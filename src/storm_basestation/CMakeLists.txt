@@ -7,7 +7,7 @@ install(DIRECTORY config launch lichtblick
   DESTINATION share/${PROJECT_NAME}
 )
 
-install(PROGRAMS scripts/hotspot_up.sh
+install(PROGRAMS scripts/hotspot_up.sh scripts/check_link.sh scripts/link_up.sh
   DESTINATION lib/${PROJECT_NAME}
 )
 

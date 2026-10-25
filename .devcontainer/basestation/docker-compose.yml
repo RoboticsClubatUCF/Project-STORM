@@ -7,14 +7,29 @@ x-ros-env: &ros-env
   # FASTRTPS_DEFAULT_PROFILES_FILE: /ws/src/storm_basestation/config/fastdds_peers.xml
 
 services:
-  basestation:
-    build:
+  # One-shot: sets the static IP through the host's NetworkManager
+  netsetup:
+    build: &runtime-build
       context: ../..
       dockerfile: .devcontainer/basestation/Dockerfile
       target: runtime
     image: storm/basestation:latest
     network_mode: host
+    env_file: ../../src/storm_basestation/config/network.env
+    volumes:
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
+    command: /ws/src/storm_basestation/scripts/link_up.sh
+    restart: "no"
+
+  basestation:
+    build: *runtime-build
+    image: storm/basestation:latest
+    depends_on:
+      netsetup:
+        condition: service_completed_successfully
+    network_mode: host
     ipc: host
+    env_file: ../../src/storm_basestation/config/network.env
     environment: *ros-env
     volumes:
       - /dev/input:/dev/input
@@ -42,6 +57,7 @@ services:
     image: storm/basestation:dev
     network_mode: host
     ipc: host
+    env_file: ../../src/storm_basestation/config/network.env
     environment: *ros-env
     volumes:
       - ../..:/workspaces/Project-STORM:cached
