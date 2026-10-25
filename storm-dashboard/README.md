@@ -23,7 +23,7 @@ the URL in `.env.local` must be the rover's link address, not localhost.
 Needs Node 18.17+ (Ubuntu's apt package is too old; use NodeSource or nvm).
 
 ```bash
-echo "NEXT_PUBLIC_ROVER_WS=ws://192.168.1.50:8765" > .env.local
+echo "NEXT_PUBLIC_ROVER_WS=ws://192.168.1.60:8765" > .env.local
 npm install
 npm run build                  # rebuild after changing .env.local
 ```

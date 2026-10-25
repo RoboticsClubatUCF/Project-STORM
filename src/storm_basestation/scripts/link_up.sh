@@ -25,7 +25,7 @@ for d in "${SCRIPT_DIR}/../config" "${SCRIPT_DIR}/../../share/storm_basestation/
   fi
 done
 
-BASE_IP="${BASE_IP:-192.168.1.60}"
+BASE_IP="${BASE_IP:-192.168.1.50}"
 LINK_PREFIX="${LINK_PREFIX:-24}"
 
 if [[ "${EUID}" -ne 0 ]]; then

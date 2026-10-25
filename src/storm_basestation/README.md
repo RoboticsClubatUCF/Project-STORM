@@ -32,8 +32,8 @@ in `config/network.env`:
 
 | Device | IP |
 |--------|----|
-| Rover Jetson | 192.168.1.50 |
-| Base Jetson | 192.168.1.60 |
+| Rover Jetson | 192.168.1.60 |
+| Base Jetson | 192.168.1.50 |
 | Rover radio | 192.168.1.21 |
 | Base radio | 192.168.1.20 |
 
@@ -42,7 +42,7 @@ their addresses. On the rover:
 
 ```bash
 sudo nmcli con add type ethernet ifname eth0 con-name storm-link \
-  ipv4.method manual ipv4.addresses 192.168.1.50/24
+  ipv4.method manual ipv4.addresses 192.168.1.60/24
 ```
 
 On the base Jetson, `scripts/link_up.sh` creates the same `storm-link`
@@ -66,7 +66,7 @@ sudo PASSWORD=<8+ chars> BAND=a scripts/hotspot_up.sh     # 5 GHz
 ```
 
 Laptops on `STORM-BASE` get a 10.42.0.x address and are NATed to the rover, so
-`ws://192.168.1.50:8765` works from the laptop as-is.
+`ws://192.168.1.60:8765` works from the laptop as-is.
 
 ### Checking the link
 
@@ -118,7 +118,7 @@ container runs `link_up.sh` first through the host's NetworkManager:
 
 ```bash
 cd .devcontainer/basestation
-printf 'ROS_DOMAIN_ID=42\nNEXT_PUBLIC_ROVER_WS=ws://192.168.1.50:8765\n' > .env
+printf 'ROS_DOMAIN_ID=42\nNEXT_PUBLIC_ROVER_WS=ws://192.168.1.60:8765\n' > .env
 docker compose up -d --build     # rebuild after changing .env or the code
 ```
 
@@ -137,7 +137,7 @@ Join `STORM-BASE`, then either:
 - **Dashboard:** open `http://10.42.0.1:3000`.
 - **Lichtblick:** install the
   [desktop app](https://github.com/lichtblick-suite/lichtblick/releases), Open
-  connection > **Foxglove WebSocket** > `ws://192.168.1.50:8765`, then Layouts >
+  connection > **Foxglove WebSocket** > `ws://192.168.1.60:8765`, then Layouts >
   Import from file > `lichtblick/storm_layout.json`.
 
 ## Files

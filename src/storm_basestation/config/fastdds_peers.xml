@@ -11,9 +11,9 @@
       <builtin>
         <initialPeersList>
           <!-- rover -->
-          <locator><udpv4><address>192.168.1.50</address></udpv4></locator>
-          <!-- base station -->
           <locator><udpv4><address>192.168.1.60</address></udpv4></locator>
+          <!-- base station -->
+          <locator><udpv4><address>192.168.1.50</address></udpv4></locator>
           <!-- same machine, so local nodes don't depend on lo multicast -->
           <locator><udpv4><address>127.0.0.1</address></udpv4></locator>
         </initialPeersList>

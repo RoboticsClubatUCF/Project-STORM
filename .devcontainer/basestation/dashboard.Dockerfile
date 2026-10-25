@@ -4,7 +4,7 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 # Baked into the client bundle at build time
-ARG NEXT_PUBLIC_ROVER_WS=ws://192.168.1.50:8765
+ARG NEXT_PUBLIC_ROVER_WS=ws://192.168.1.60:8765
 ENV NEXT_PUBLIC_ROVER_WS=$NEXT_PUBLIC_ROVER_WS
 RUN npm run build
 

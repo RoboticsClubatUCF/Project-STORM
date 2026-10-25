@@ -3,7 +3,7 @@
 # check_link.sh: checks the base station's link to the rover, layer by layer.
 #
 #   ./check_link.sh
-#   ROVER_IP=192.168.1.50 ./check_link.sh      # override config/network.env
+#   ROVER_IP=192.168.1.60 ./check_link.sh      # override config/network.env
 #
 # Needs the rover running teleop.launch.py with the same ROS_DOMAIN_ID.
 # The DDS check runs without FASTRTPS_DEFAULT_PROFILES_FILE first, so passing
@@ -24,8 +24,8 @@ if [[ -f "${CONFIG_DIR}/network.env" ]]; then
   done < "${CONFIG_DIR}/network.env"
 fi
 
-ROVER_IP="${ROVER_IP:-192.168.1.50}"
-BASE_IP="${BASE_IP:-192.168.1.60}"
+ROVER_IP="${ROVER_IP:-192.168.1.60}"
+BASE_IP="${BASE_IP:-192.168.1.50}"
 ROVER_RADIO_IP="${ROVER_RADIO_IP:-192.168.1.21}"
 BASE_RADIO_IP="${BASE_RADIO_IP:-192.168.1.20}"
 LINK_PREFIX="${LINK_PREFIX:-24}"
