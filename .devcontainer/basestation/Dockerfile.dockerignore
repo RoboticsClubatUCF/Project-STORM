@@ -1,0 +1,8 @@
+.git
+.idea
+.devcontainer
+build
+install
+log
+storm-dashboard
+**/node_modules

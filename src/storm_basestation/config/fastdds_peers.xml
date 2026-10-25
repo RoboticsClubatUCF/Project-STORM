@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Fast DDS unicast discovery for when the bridge radios drop multicast.
+  Use the same file on the rover and the base station:
+    export FASTRTPS_DEFAULT_PROFILES_FILE=<repo>/src/storm_basestation/config/fastdds_peers.xml
+  Update the addresses if either machine's IP changes.
+-->
+<profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+  <participant profile_name="storm_peers" is_default_profile="true">
+    <rtps>
+      <builtin>
+        <initialPeersList>
+          <!-- rover -->
+          <locator><udpv4><address>192.168.1.50</address></udpv4></locator>
+          <!-- base station -->
+          <locator><udpv4><address>192.168.1.20</address></udpv4></locator>
+          <!-- same machine, so local nodes don't depend on lo multicast -->
+          <locator><udpv4><address>127.0.0.1</address></udpv4></locator>
+        </initialPeersList>
+      </builtin>
+    </rtps>
+  </participant>
+</profiles>

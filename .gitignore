@@ -2,3 +2,6 @@ log/
 build/
 install/
 .cache/
+node_modules/
+.next/
+.devcontainer/basestation/.env

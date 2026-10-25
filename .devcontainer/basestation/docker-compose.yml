@@ -1,0 +1,53 @@
+# Base Jetson:  docker compose up -d --build
+# VS Code:      Reopen in Container > basestation (starts only `dev`)
+
+x-ros-env: &ros-env
+  ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-42}
+  # Uncomment if the radios drop multicast (see storm_basestation/README.md)
+  # FASTRTPS_DEFAULT_PROFILES_FILE: /ws/src/storm_basestation/config/fastdds_peers.xml
+
+services:
+  basestation:
+    build:
+      context: ../..
+      dockerfile: .devcontainer/basestation/Dockerfile
+      target: runtime
+    image: storm/basestation:latest
+    network_mode: host
+    ipc: host
+    environment: *ros-env
+    volumes:
+      - /dev/input:/dev/input
+    device_cgroup_rules:
+      - "c 13:* rmw"
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: ../../storm-dashboard
+      dockerfile: ../.devcontainer/basestation/dashboard.Dockerfile
+      args:
+        NEXT_PUBLIC_ROVER_WS: ${NEXT_PUBLIC_ROVER_WS:-ws://192.168.1.50:8765}
+    image: storm/dashboard:latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  dev:
+    profiles: [dev]
+    build:
+      context: ../..
+      dockerfile: .devcontainer/basestation/Dockerfile
+      target: dev
+    image: storm/basestation:dev
+    network_mode: host
+    ipc: host
+    environment: *ros-env
+    volumes:
+      - ../..:/workspaces/Project-STORM:cached
+      # Keeps the container's Linux node_modules from clobbering the host's
+      - dashboard-node-modules:/workspaces/Project-STORM/storm-dashboard/node_modules
+    command: sleep infinity
+
+volumes:
+  dashboard-node-modules:

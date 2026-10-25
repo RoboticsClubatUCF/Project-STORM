@@ -1,0 +1,28 @@
+{
+	"name": "STORM Base Station",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "dev",
+	"runServices": ["dev"],
+	"workspaceFolder": "/workspaces/Project-STORM",
+	"remoteUser": "ros",
+
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": { "version": "20" }
+	},
+
+	"forwardPorts": [3000],
+
+	"postCreateCommand": "sudo chown ros:ros storm-dashboard/node_modules && cd storm-dashboard && npm ci",
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"Ranch-Hand-Robotics.rde-ros-2",
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.debugpy",
+				"dbaeumer.vscode-eslint"
+			]
+		}
+	}
+}
