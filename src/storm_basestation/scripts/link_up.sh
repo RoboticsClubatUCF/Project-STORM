@@ -33,8 +33,11 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
-if ! nmcli -t general status >/dev/null 2>&1; then
-  echo "link_up.sh: can't reach NetworkManager (in Docker, mount /run/dbus/system_bus_socket)." >&2
+if ! nm_err="$(nmcli -t general status 2>&1 >/dev/null)"; then
+  echo "link_up.sh: can't reach NetworkManager: ${nm_err}" >&2
+  if [[ ! -S /run/dbus/system_bus_socket ]]; then
+    echo "link_up.sh: /run/dbus/system_bus_socket is not a socket; is it mounted from the host?" >&2
+  fi
   exit 1
 fi
 

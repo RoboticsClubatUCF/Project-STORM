@@ -18,6 +18,9 @@ services:
     env_file: ../../src/storm_basestation/config/network.env
     volumes:
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
+    # docker-default AppArmor blocks D-Bus calls to NetworkManager
+    security_opt:
+      - apparmor:unconfined
     command: /ws/src/storm_basestation/scripts/link_up.sh
     restart: "no"
 
