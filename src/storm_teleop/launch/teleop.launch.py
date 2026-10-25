@@ -125,11 +125,22 @@ def _launch_setup(context):
         ],
     )
 
-    # 5) joy_node: reads /dev/input/js0 → publishes /joy
-    #    Off with use_joy:=false
+    # 5) joy_node: reads /dev/input/js0 → publishes /joy/raw
+    #    joy_watchdog forwards it to /joy while the controller is alive
+    #    Both off with use_joy:=false
     joy_node = Node(
         package='joy',
         executable='joy_node',
+        parameters=[joy_teleop],
+        remappings=[('joy', 'joy/raw')],
+        condition=IfCondition(LaunchConfiguration('use_joy')),
+        output='screen',
+    )
+
+    joy_watchdog = Node(
+        package='storm_teleop',
+        executable='joy_watchdog.py',
+        name='joy_watchdog',
         parameters=[joy_teleop],
         condition=IfCondition(LaunchConfiguration('use_joy')),
         output='screen',
@@ -170,6 +181,7 @@ def _launch_setup(context):
         diff_drive_spawner,
         jsb_spawner,
         joy_node,
+        joy_watchdog,
         teleop_twist_joy,
         telemetry,
         bridge,

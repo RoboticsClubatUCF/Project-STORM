@@ -34,6 +34,7 @@ FROM base AS runtime
 # Source-tree layout lets base_station.launch.py find joy_teleop.yaml without a colcon build
 COPY src/storm_basestation /ws/src/storm_basestation
 COPY src/storm_teleop/config/joy_teleop.yaml /ws/src/storm_teleop/config/joy_teleop.yaml
+COPY src/storm_teleop/scripts/joy_watchdog.py /ws/src/storm_teleop/scripts/joy_watchdog.py
 WORKDIR /ws
 # Link check result goes to the logs; joy_node starts either way
 CMD ["bash", "-c", "/ws/src/storm_basestation/scripts/check_link.sh || true; exec ros2 launch /ws/src/storm_basestation/launch/base_station.launch.py"]

@@ -75,6 +75,19 @@ sudo udevadm control --reload
 Reconnect the controller, then check `journalctl -t bt_joy_failsafe` for
 `link supervision timeout 1000 ms`.
 
+### Controller watchdog
+
+`joy_watchdog` sits between `joy_node` (`/joy/raw`) and `teleop_twist_joy`
+(`/joy`). DS4/DualSense controllers stream motion data nonstop, so when it
+goes quiet for 250 ms the watchdog sends a released-deadman `/joy` and blocks
+input until the controller is back. It runs wherever `joy_node` runs (rover or
+base station). Controllers without a motion sensor pass straight through with
+a warning. The user running the launch needs to be in the `input` group:
+
+```bash
+sudo usermod -aG input $USER    # log out and back in
+```
+
 ## Build
 
 ```bash

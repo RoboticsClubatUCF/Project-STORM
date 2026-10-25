@@ -27,6 +27,11 @@ joy_node:
     autorepeat_rate: 20.0      # Hz, republish even if stick is held steady
     coalesce_interval_ms: 10   # merge events within 10 ms
 
+joy_watchdog:
+  ros__parameters:
+    timeout_ms: 250            # ms without DS4/DualSense motion reports = controller lost
+    require_motion: false      # true: block controllers without a motion sensor device
+
 teleop_twist_joy_node:
   ros__parameters:
     # --- Stick axes ---
