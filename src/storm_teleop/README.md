@@ -58,6 +58,23 @@ sudo systemctl enable --now storm-can0.service
 
 Verify: `ip -details link show can0` → shows `UP`, the bitrate, and `restart-ms`.
 
+### Bluetooth controller failsafe
+
+A Bluetooth controller that dies (battery, range) stays connected for up to
+20 s, and joy_node keeps sending its last input, so the rover keeps driving.
+Install the udev rule so the link drops after 1 s instead:
+
+```bash
+sudo apt install bluez                        # provides hcitool
+sudo cp scripts/bt_joy_failsafe.sh /usr/local/bin/bt_joy_failsafe.sh
+sudo chmod +x /usr/local/bin/bt_joy_failsafe.sh
+sudo cp udev/99-storm-bt-joy.rules /etc/udev/rules.d/
+sudo udevadm control --reload
+```
+
+Reconnect the controller, then check `journalctl -t bt_joy_failsafe` for
+`link supervision timeout 1000 ms`.
+
 ## Build
 
 ```bash

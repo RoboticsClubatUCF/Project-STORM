@@ -1,0 +1,17 @@
+# =============================================================================
+# 99-storm-bt-joy.rules: shorten the BT link timeout whenever a joystick appears.
+#
+# Install (once, on the rover):
+#   sudo cp scripts/bt_joy_failsafe.sh /usr/local/bin/bt_joy_failsafe.sh
+#   sudo chmod +x /usr/local/bin/bt_joy_failsafe.sh
+#   sudo cp udev/99-storm-bt-joy.rules /etc/udev/rules.d/
+#   sudo udevadm control --reload
+#
+# Check after connecting the controller:
+#   journalctl -t bt_joy_failsafe
+#   sudo hcitool lst <controller MAC>    # 1600 slots = 1 s
+#
+# systemd-run because udev's sandbox blocks Bluetooth sockets. USB joysticks
+# trigger it too; the script only touches Bluetooth links.
+# =============================================================================
+ACTION=="add", SUBSYSTEM=="input", KERNEL=="js*", RUN+="/usr/bin/systemd-run --no-block --collect /usr/local/bin/bt_joy_failsafe.sh"
