@@ -1,0 +1,24 @@
+# storm-dashboard as a systemd user service on the base station Jetson.
+#
+# Install (once, as the user that owns the repo):
+#   mkdir -p ~/.config/systemd/user
+#   cp systemd/storm-dashboard.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now storm-dashboard.service
+#   sudo loginctl enable-linger $USER   # start at boot without logging in
+#
+# Assumes the repo is at ~/Project-STORM; edit WorkingDirectory if not.
+# Run `npm run build` after changing .env.local or the code.
+
+[Unit]
+Description=STORM web dashboard
+After=network-online.target
+
+[Service]
+WorkingDirectory=%h/Project-STORM/storm-dashboard
+ExecStart=/usr/bin/env npm start -- -p 3000
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

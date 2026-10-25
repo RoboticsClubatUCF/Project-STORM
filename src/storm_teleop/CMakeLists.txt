@@ -1,14 +1,10 @@
 cmake_minimum_required(VERSION 3.8)
+project(storm_teleop)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-if(CMAKE_EXPORT_COMPILE_COMMANDS)
-  set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES 
-      ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
-
-project(storm_teleop LANGUAGES C CXX)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -20,6 +16,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(yaml-cpp REQUIRED)  # parse config/sparks.yaml in the plugin
 
 # sparkcan: system library installed via PPA (sudo apt install sparkcan).
 # It installs headers to /usr/local/include and libsparkcan.so to /usr/local/lib.
@@ -36,13 +33,14 @@ find_path(SPARKCAN_INCLUDE_DIR SparkMax.hpp
 # ---------- hardware interface shared library ----------
 add_library(spark_can_hardware SHARED
   src/spark_can_hardware.cpp
+  src/spark_status_reader.cpp
 )
 target_include_directories(spark_can_hardware PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
   ${SPARKCAN_INCLUDE_DIR}
 )
-target_link_libraries(spark_can_hardware ${SPARKCAN_LIB})
+target_link_libraries(spark_can_hardware ${SPARKCAN_LIB} yaml-cpp)
 ament_target_dependencies(spark_can_hardware
   rclcpp
   rclcpp_lifecycle
@@ -60,6 +58,14 @@ install(TARGETS spark_can_hardware
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
+)
+
+# Bring-up script + systemd unit (installed to share for reference/copying)
+install(PROGRAMS scripts/can0_up.sh
+  DESTINATION lib/${PROJECT_NAME}
+)
+install(DIRECTORY scripts systemd
+  DESTINATION share/${PROJECT_NAME}
 )
 
 # Header files

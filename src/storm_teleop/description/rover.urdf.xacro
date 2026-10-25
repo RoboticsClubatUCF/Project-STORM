@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="urc_rover">
 
+  <!-- Absolute path to the SPARK config YAML (PID gains). The launch file
+       resolves and passes this; empty default => plugin uses built-in gains. -->
+  <xacro:arg name="spark_config" default=""/>
+
+  <!-- SocketCAN interface for the SPARKs, set by the launch can_interface arg -->
+  <xacro:arg name="can_interface" default="can0"/>
+
   <!-- All units: meters, kg, radians -->
 
   <!-- Chassis: simple box -->
@@ -113,7 +120,7 @@
 
   <!-- 6 wheels -->
   <!-- Right side (positive Y = left in ROS, but your track has right = negative Y
-       when looking from behind — adjust sign convention to match your physical robot.
+       when looking from behind, adjust sign convention to match your physical robot.
        Standard ROS: X forward, Y left, Z up. So right = -Y. -->
   <xacro:wheel name="front_right_wheel"  x_pos="${wheel_x_front}"  y_pos="${-wheel_y_offset}"/>
   <xacro:wheel name="middle_right_wheel" x_pos="${wheel_x_middle}" y_pos="${-wheel_y_offset}"/>
@@ -137,61 +144,79 @@
   <ros2_control name="SparkCanSystem" type="system">
     <hardware>
       <plugin>storm_teleop/SparkCanHardware</plugin>
-      <param name="can_interface">can0</param>
-      <param name="gear_ratio">81.0</param>
-      <!-- SPARK MAX onboard velocity PID starting values.
-           kF = 1/free_speed_RPM ≈ 1/5676 for NEO V1.1.
-           Tune on real hardware — these are conservative first-pass values. -->
-      <param name="pid_kp">0.0001</param>
-      <param name="pid_ki">0.0</param>
-      <param name="pid_kd">0.0</param>
-      <param name="pid_kf">0.000176</param>
+      <param name="can_interface">$(arg can_interface)</param>
+      <param name="gear_ratio">9.0</param>
+      <!-- Persist config to each SPARK's flash. Keep false for normal use
+           (config is re-applied over CAN every launch). Set true for a single
+           launch to commit a new persistent baseline, then set back to false. -->
+      <param name="burn_flash">false</param>
+      <!-- Pre-flight gate: if true, on_configure fails (rover won't activate)
+           unless all 6 SPARKs are seen on the bus. Set false to allow limping
+           up with fewer. -->
+      <param name="require_all_sparks">true</param>
+      <!-- No status frame for this long = SPARK offline; the rest keep driving -->
+      <param name="status_timeout_ms">100</param>
+      <!-- SPARK MAX onboard velocity PID gains live in config/sparks.yaml.
+           The launch file resolves that file's absolute path into this param. -->
+      <param name="spark_config">$(arg spark_config)</param>
     </hardware>
 
     <!-- RIGHT SIDE (looking from behind the rover) -->
     <joint name="back_right_wheel_joint">
-      <param name="can_id">1</param>
+      <param name="can_id">4</param>
       <param name="inverted">false</param>
       <command_interface name="velocity"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
+      <state_interface name="voltage"/>
+      <state_interface name="online"/>
     </joint>
     <joint name="middle_right_wheel_joint">
-      <param name="can_id">2</param>
+      <param name="can_id">5</param>
       <param name="inverted">false</param>
       <command_interface name="velocity"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
+      <state_interface name="voltage"/>
+      <state_interface name="online"/>
     </joint>
     <joint name="front_right_wheel_joint">
-      <param name="can_id">3</param>
+      <param name="can_id">6</param>
       <param name="inverted">false</param>
       <command_interface name="velocity"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
+      <state_interface name="voltage"/>
+      <state_interface name="online"/>
     </joint>
 
     <!-- LEFT SIDE -->
     <joint name="front_left_wheel_joint">
-      <param name="can_id">4</param>
+      <param name="can_id">1</param>
       <param name="inverted">true</param>
       <command_interface name="velocity"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
+      <state_interface name="voltage"/>
+      <state_interface name="online"/>
     </joint>
     <joint name="middle_left_wheel_joint">
-      <param name="can_id">5</param>
+      <param name="can_id">2</param>
       <param name="inverted">true</param>
       <command_interface name="velocity"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
+      <state_interface name="voltage"/>
+      <state_interface name="online"/>
     </joint>
     <joint name="back_left_wheel_joint">
-      <param name="can_id">6</param>
+      <param name="can_id">3</param>
       <param name="inverted">true</param>
       <command_interface name="velocity"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
+      <state_interface name="voltage"/>
+      <state_interface name="online"/>
     </joint>
   </ros2_control>
 

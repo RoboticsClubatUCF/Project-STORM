@@ -1,0 +1,28 @@
+# =============================================================================
+# telemetry.yaml: storm_telemetry node params
+# =============================================================================
+
+can_health_node:
+  ros__parameters:
+    update_period: 1.0       # s
+    error_delta_warn: 5      # rx+tx errors per update before WARN
+
+system_monitor_node:
+  ros__parameters:
+    update_period: 1.0       # s
+    wifi_interface: ""       # empty = first interface in /proc/net/wireless
+    disk_path: "/"
+
+battery_monitor_node:
+  ros__parameters:
+    update_period: 1.0       # s
+    stale_timeout: 2.0       # s, no /dynamic_joint_states for this long = UNKNOWN
+    # FRC 12 V SLA. Compared against the smoothed lowest SPARK reading; 0 disables
+    low_voltage: 11.5        # V, swap soon
+    critical_voltage: 10.5   # V, stop and swap
+    filter_time_constant: 5.0  # s, hides acceleration sag
+
+spark_monitor_node:
+  ros__parameters:
+    update_period: 1.0       # s
+    stale_timeout: 2.0       # s, no /dynamic_joint_states for this long = STALE

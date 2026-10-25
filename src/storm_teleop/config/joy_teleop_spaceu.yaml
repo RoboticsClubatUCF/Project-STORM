@@ -1,0 +1,15 @@
+# =============================================================================
+# joy_teleop_spaceu.yaml: full-speed turbo overrides (teleop-spaceu.launch.py)
+# =============================================================================
+#
+# Layered over joy_teleop.yaml; only these keys change. Turbo goes to the
+# controllers.yaml hard ceilings. Full stick on both axes asks for more wheel
+# speed than the motors have, so the SPARKs saturate and arcs flatten out.
+# =============================================================================
+
+teleop_twist_joy_node:
+  ros__parameters:
+    scale_linear_turbo:
+      x: -5.4                 # m/s, = linear.x.max_velocity (≈86% of theoretical max)
+    scale_angular_turbo:
+      yaw: -12.5              # rad/s, = angular.z.max_velocity

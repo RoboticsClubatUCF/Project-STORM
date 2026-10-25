@@ -1,0 +1,26 @@
+# =============================================================================
+# foxglove_bridge.yaml: WebSocket bridge for Lichtblick / storm-dashboard
+# =============================================================================
+
+foxglove_bridge:
+  ros__parameters:
+    port: 8765
+    address: "0.0.0.0"
+
+    # Only these topics go over WiFi (regex)
+    topic_whitelist:
+      - "^/diagnostics$"
+      - "^/telemetry/.*"
+      - "^/odom$"
+      - "^/tf$"
+      - "^/tf_static$"
+      - "^/robot_description$"
+      - "^/joint_states$"
+      - "^/joy$"
+      - "^/diff_drive_controller/cmd_vel_unstamped$"
+
+    # Read-only: viewers can't publish, call services or change params.
+    # Driving stays on /joy over DDS.
+    capabilities:
+      - connectionGraph
+      - assets

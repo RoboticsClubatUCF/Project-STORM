@@ -1,4 +1,6 @@
-# joy_teleop.yaml — joy_node + teleop_twist_joy params
+# =============================================================================
+# joy_teleop.yaml: joy_node + teleop_twist_joy params
+# =============================================================================
 #
 # Wired Xbox controller axis/button map on Linux (xpad driver):
 #
@@ -15,40 +17,51 @@
 #                                   9  Left stick click
 #                                  10  Right stick click
 #
-# Verify your mapping with:  ros2 run joy joy_node  then  ros2 topic echo /joy
+# Verify mapping with:  ros2 run joy joy_node  then  ros2 topic echo /joy
+# =============================================================================
 
 joy_node:
   ros__parameters:
     device_id: 0               # /dev/input/js0
     deadzone: 0.1              # ignore stick drift below 10%
-    autorepeat_rate: 20.0      # Hz — republish even if stick is held steady
+    autorepeat_rate: 20.0      # Hz, republish even if stick is held steady
     coalesce_interval_ms: 10   # merge events within 10 ms
 
 teleop_twist_joy_node:
   ros__parameters:
-    # Stick axes
+    # --- Stick axes ---
     axis_linear:
-      x: 1                    # left stick Y  (push forward = positive)
+      x: 1                    # left stick Y
     axis_angular:
-      yaw: 0                  # left stick X  (push left = positive turn)
+      yaw: 0                  # left stick X
 
-    # Speed scales
-    # Normal mode (A held): gentle driving for precision tasks.
-    # Turbo mode  (A + RB held): near-max speed.
+    # --- Speed scales ---
+    # Normal mode (A held): indoor driving.
+    # Turbo mode  (A + RB held): near-max speed, outdoors only.
     #
-    # Physics limits with 81:1 + NEO V1.1:
-    #   theoretical max linear  ≈ 0.70 m/s
-    #   theoretical max angular ≈ 1.62 rad/s
+    # NOTE: scales are NEGATIVE to invert both sticks. On this controller the
+    # raw joy axes read the opposite sign (push forward -> rover reversed, push
+    # left -> rover turned right). teleop_twist_joy has no invert flag, so we
+    # flip the sign via the scale. Flip an axis's sign here if a stick feels
+    # backwards; the magnitudes are the real speed limits.
+    #
+    # Physics limits with 9:1 + NEO V1.1:
+    #   theoretical max linear  ≈ 6.29 m/s
+    #   theoretical max angular ≈ 14.6 rad/s
+    #
+    # Turbo is sized so full stick on both axes stays under the 5.4 m/s wheel
+    # ceiling: linear + angular × (wheel_separation / 2) = 3.5 + 4.4 × 0.4318 ≈ 5.4.
+    # teleop-spaceu.launch.py overrides turbo to the full ceilings.
     scale_linear:
-      x: 0.3                  # m/s — normal forward speed
+      x: -1.0                 # m/s, indoor cap (negated: push forward = forward)
     scale_linear_turbo:
-      x: 0.6                  # m/s — turbo (≈86% of theoretical max)
+      x: -3.5                 # m/s, turbo
     scale_angular:
-      yaw: 0.7                # rad/s — normal turn rate
+      yaw: -2.0               # rad/s, indoor cap (negated: push left = turn left)
     scale_angular_turbo:
-      yaw: 1.4                # rad/s — turbo turn rate
+      yaw: -4.4               # rad/s, turbo turn rate
 
-    # Deadman / enable
+    # --- Deadman / enable ---
     # MUST hold A to move. Release = instant zero-velocity publish.
     enable_button: 0           # A
     enable_turbo_button: 5     # RB (hold BOTH A+RB for turbo)

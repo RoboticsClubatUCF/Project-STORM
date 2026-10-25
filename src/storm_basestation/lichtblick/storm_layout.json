@@ -1,0 +1,102 @@
+{
+  "configById": {
+    "3D!storm3d": {
+      "followMode": "follow-pose",
+      "followTf": "base_link",
+      "scene": {},
+      "transforms": {},
+      "topics": {
+        "/odom": { "visible": true }
+      },
+      "layers": {
+        "grid": {
+          "layerId": "foxglove.Grid",
+          "instanceId": "grid",
+          "visible": true,
+          "frameId": "odom",
+          "size": 20,
+          "divisions": 20,
+          "order": 1
+        },
+        "urdf": {
+          "layerId": "foxglove.Urdf",
+          "instanceId": "urdf",
+          "visible": true,
+          "sourceType": "topic",
+          "topic": "/robot_description",
+          "displayMode": "auto",
+          "order": 2
+        }
+      },
+      "publish": { "type": "point", "poseTopic": "", "pointTopic": "", "poseEstimateTopic": "" },
+      "imageMode": {}
+    },
+    "DiagnosticSummary!stormdiag": {
+      "topicToRender": "/diagnostics",
+      "minLevel": 0,
+      "pinnedIds": [],
+      "hardwareIdFilter": "",
+      "sortByLevel": true
+    },
+    "Plot!stormbattery": {
+      "title": "Battery",
+      "paths": [
+        { "value": "/telemetry/battery.voltage", "enabled": true, "timestampMethod": "receiveTime" },
+        { "value": "/telemetry/battery.min_voltage", "enabled": true, "timestampMethod": "receiveTime" }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "isSynced": true,
+      "xAxisVal": "timestamp",
+      "followingViewWidth": 300
+    },
+    "Plot!stormsystem": {
+      "title": "Computer",
+      "paths": [
+        { "value": "/telemetry/system.cpu_percent", "enabled": true, "timestampMethod": "receiveTime" },
+        { "value": "/telemetry/system.cpu_temp_c", "enabled": true, "timestampMethod": "receiveTime" },
+        { "value": "/telemetry/system.mem_used_percent", "enabled": true, "timestampMethod": "receiveTime" }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "isSynced": true,
+      "xAxisVal": "timestamp",
+      "followingViewWidth": 300
+    },
+    "RawMessages!stormraw": {
+      "topicPath": "/telemetry/system",
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "expansion": "all"
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": { "speed": 1 },
+  "layout": {
+    "direction": "row",
+    "splitPercentage": 55,
+    "first": "3D!storm3d",
+    "second": {
+      "direction": "column",
+      "splitPercentage": 35,
+      "first": "DiagnosticSummary!stormdiag",
+      "second": {
+        "direction": "column",
+        "splitPercentage": 50,
+        "first": {
+          "direction": "row",
+          "first": "Plot!stormbattery",
+          "second": "Plot!stormsystem"
+        },
+        "second": "RawMessages!stormraw"
+      }
+    }
+  }
+}

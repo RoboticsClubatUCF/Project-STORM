@@ -1,0 +1,24 @@
+# =============================================================================
+# sparks.yaml: SPARK MAX device configuration
+#
+# Loaded directly by the SparkCanHardware plugin (not by controller_manager).
+# The launch file resolves this file's absolute path and passes it into the
+# URDF <hardware> block as the `spark_config` param; on_init() parses it here.
+#
+# Precedence for each value:  this file  ->  header default (spark_can_hardware.hpp)
+# If this file is missing, unreadable, or a key is absent, the plugin logs a
+# warning and falls back to the header default; the robot still comes up.
+#
+# These gains feed each SPARK's onboard velocity PID (control slot 0).
+#   kF (feedforward) does most of the work: output ≈ kF × setpoint_rpm.
+#   kF = 1 / free_speed_RPM ≈ 1/5676 for NEO V1.1.
+#   kP adds a small correction for steady-state error.
+# Tune on the real robot.
+# =============================================================================
+
+spark_config:
+  pid:
+    kp: 0.0001
+    ki: 0.0
+    kd: 0.0
+    kf: 0.000176

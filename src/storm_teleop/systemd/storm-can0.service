@@ -1,0 +1,32 @@
+# =============================================================================
+# storm-can0.service: bring up can0 for the drivetrain SPARKs at boot.
+#
+# Install (once, on the rover):
+#   sudo cp systemd/storm-can0.service /etc/systemd/system/
+#   sudo cp scripts/can0_up.sh /usr/local/bin/can0_up.sh
+#   sudo chmod +x /usr/local/bin/can0_up.sh
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now storm-can0.service
+#
+# Check:  systemctl status storm-can0.service
+#         ip -details link show can0
+#
+# Override bitrate/interface without editing this file:
+#   sudo systemctl edit storm-can0.service   # add [Service] Environment=BITRATE=500000
+# =============================================================================
+[Unit]
+Description=Bring up can0 for storm drivetrain SPARKs
+Wants=network-pre.target
+Before=network-pre.target
+# Run before any ROS bringup that opens the bus.
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Environment=IFACE=can0
+Environment=BITRATE=1000000
+Environment=RESTART_MS=100
+ExecStart=/usr/local/bin/can0_up.sh
+
+[Install]
+WantedBy=multi-user.target

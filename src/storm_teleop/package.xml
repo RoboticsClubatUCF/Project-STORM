@@ -4,7 +4,7 @@
   <name>storm_teleop</name>
   <version>0.1.0</version>
   <description>URC rover teleop package: joystick → diff_drive_controller → SPARK MAX via CAN</description>
-  <maintainer email="todo@todo.com">TODO</maintainer>
+  <maintainer email="vcadicamo@icloud.com">Vincent Cadicamo</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
@@ -14,6 +14,11 @@
   <depend>rclcpp_lifecycle</depend>
   <depend>hardware_interface</depend>
   <depend>pluginlib</depend>
+  <depend>yaml-cpp</depend>
+
+  <!-- Telemetry + Lichtblick bridge, included by teleop.launch.py -->
+  <exec_depend>storm_telemetry</exec_depend>
+  <exec_depend>storm_basestation</exec_depend>
 
   <!-- Controllers -->
   <depend>controller_manager</depend>
@@ -29,12 +34,13 @@
   <depend>xacro</depend>
   <depend>urdf</depend>
 
-  <!-- sparkcan is a system library installed via PPA, not a ROS package. -->
+  <!-- sparkcan is a system library installed via PPA, not a ROS package.
+       If colcon complains, you can remove this line; it's just documentation. -->
   <!-- <build_depend>sparkcan</build_depend> -->
 
   <export>
     <build_type>ament_cmake</build_type>
-    <!-- Tells pluginlib where to find our hardware interface plugin -->
+    <!-- Tell pluginlib where to find our hardware interface plugin -->
     <hardware_interface plugin="${prefix}/spark_can_hardware.xml"/>
   </export>
 </package>

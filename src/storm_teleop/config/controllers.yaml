@@ -1,8 +1,10 @@
-# controllers.yaml — loaded by controller_manager (ros2_control_node)
+# =============================================================================
+# controllers.yaml: loaded by controller_manager (ros2_control_node)
+# =============================================================================
 
 controller_manager:
   ros__parameters:
-    update_rate: 50  # Hz — hardware read/write loop rate
+    update_rate: 50  # Hz, hardware read/write loop rate
 
     # Declare which controllers exist (controller_manager loads them by name)
     diff_drive_controller:
@@ -13,7 +15,7 @@ controller_manager:
 
 diff_drive_controller:
   ros__parameters:
-    # Wheel joints
+    # --- Wheel joints ---
     # 3 per side, all commanded with the same velocity by diff_drive_controller
     left_wheel_names:
       - front_left_wheel_joint
@@ -24,7 +26,7 @@ diff_drive_controller:
       - middle_right_wheel_joint
       - back_right_wheel_joint
 
-    # Kinematics
+    # --- Kinematics ---
     wheel_separation: 0.8636   # 34 inches center-to-center
     wheel_radius:     0.09525  # 3.75 inches
 
@@ -33,13 +35,13 @@ diff_drive_controller:
     left_wheel_radius_multiplier: 1.0
     right_wheel_radius_multiplier: 1.0
 
-    # Input topic mode
+    # --- Input topic mode ---
     # diff_drive_controller defaults to TwistStamped on ~/cmd_vel.
     # teleop_twist_joy publishes plain Twist, so subscribe to ~/cmd_vel_unstamped
     # instead. The launch file remaps teleop's cmd_vel to this topic.
     use_stamped_vel: false
 
-    # Command timeout (SAFETY)
+    # --- Command timeout (SAFETY) ---
     # If no /cmd_vel arrives within this window, command zero velocity.
     # This is the comms-loss failsafe: if WiFi drops (future base-station
     # setup), the rover stops within 0.5 s.
@@ -55,26 +57,31 @@ diff_drive_controller:
     # Publish odom --> base_link TF
     enable_odom_tf: true
 
-    # Use open-loop odometry (integrate commands, not encoder feedback).
+    # false: odometry from encoder feedback (closed loop).
+    # true: integrate commands instead, fallback if encoders misbehave.
     open_loop: false
 
-    # Velocity limits
+    # --- Velocity limits ---
     # These are the controller's internal clamps. They should match or
     # exceed teleop limits so the controller doesn't silently eat commands.
-
-    # Physics ceiling with 81:1 gearing + NEO V1.1:
-    #   max linear  ≈ 0.70 m/s   (5676 RPM / 81 → wheel rad/s × radius)
-    #   max angular ≈ 1.62 rad/s  (pure point-turn, both sides at max)
-
+    # Sized for the SpaceU turbo (joy_teleop_spaceu.yaml), the fastest profile.
+    #
+    # Physics ceiling with 9:1 gearing + NEO V1.1:
+    #   max linear  ≈ 6.29 m/s   (5676 RPM / 9 → wheel rad/s × radius)
+    #   max angular ≈ 14.6 rad/s  (pure point-turn, both sides at max)
+    #
     # We clamp slightly below theoretical max to leave PID headroom.
     linear.x.has_velocity_limits: true
-    linear.x.max_velocity:  0.6     # m/s — hard ceiling
+    linear.x.max_velocity:  5.4     # m/s, hard ceiling
     linear.x.has_acceleration_limits: true
-    linear.x.max_acceleration: 1.0  # m/s² — smooth ramp-up
+    # Humble limits dv by sign, not speed: keep min = -max so braking is the same both ways
+    linear.x.max_acceleration: 6.0  # m/s², turbo stops in ~2.4 m
+    linear.x.min_acceleration: -6.0
     linear.x.has_jerk_limits: false
 
     angular.z.has_velocity_limits: true
-    angular.z.max_velocity:  1.4    # rad/s — hard ceiling
+    angular.z.max_velocity:  12.5   # rad/s, hard ceiling
     angular.z.has_acceleration_limits: true
-    angular.z.max_acceleration: 2.0 # rad/s²
+    angular.z.max_acceleration: 8.0 # rad/s²
+    angular.z.min_acceleration: -8.0
     angular.z.has_jerk_limits: false
