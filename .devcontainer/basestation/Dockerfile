@@ -36,5 +36,7 @@ COPY src/storm_basestation /ws/src/storm_basestation
 COPY src/storm_teleop/config/joy_teleop.yaml /ws/src/storm_teleop/config/joy_teleop.yaml
 COPY src/storm_teleop/scripts/joy_watchdog.py /ws/src/storm_teleop/scripts/joy_watchdog.py
 WORKDIR /ws
+# udev hotplug events don't reach the container; SDL watches /dev/input itself so a replugged controller reopens
+ENV SDL_JOYSTICK_DISABLE_UDEV=1
 # Link check result goes to the logs; joy_node starts either way
 CMD ["bash", "-c", "/ws/src/storm_basestation/scripts/check_link.sh || true; exec ros2 launch /ws/src/storm_basestation/launch/base_station.launch.py"]

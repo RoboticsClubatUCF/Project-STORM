@@ -38,7 +38,7 @@ class JoyWatchdog(Node):
 
         self.device = None
         self.last_motion = 0.0
-        self.seen_motion_device = False  # once seen, never fall back to pass-through
+        self.seen_motion_device = False  # once motion data arrives, never fall back to pass-through
         self.alive = False
         self.last_joy = None
 
@@ -64,12 +64,14 @@ class JoyWatchdog(Node):
                     time.sleep(1.0)
                     continue
                 self.device = path
-                self.seen_motion_device = True
                 self.get_logger().info(f'Watching {path}')
             try:
                 ready, _, _ = select.select([fd], [], [], 0.5)
                 if ready and os.read(fd, 4096):
                     self.last_motion = time.monotonic()
+                    if not self.seen_motion_device:
+                        self.seen_motion_device = True
+                        self.get_logger().info(f'Motion data streaming from {path}')
             except OSError:
                 # Device removed
                 os.close(fd)

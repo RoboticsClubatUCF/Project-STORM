@@ -36,6 +36,8 @@ services:
     environment: *ros-env
     volumes:
       - /dev/input:/dev/input
+      # Host udev database, in case SDL uses udev (SDL_JOYSTICK_DISABLE_UDEV unset)
+      - /run/udev:/run/udev:ro
     device_cgroup_rules:
       - "c 13:* rmw"
     restart: unless-stopped
