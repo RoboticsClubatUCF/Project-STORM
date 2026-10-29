@@ -16,6 +16,7 @@
 
 #include "storm_teleop/spark_can_hardware.hpp"
 
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <limits>
@@ -84,6 +85,21 @@ hardware_interface::CallbackReturn SparkCanHardware::on_init(
     status_timeout_ms_ = std::stoi(timeout_it->second);
   }
 
+  // Middle wheel coast-on-turn thresholds, see header
+  auto read_double = [this](const std::string & name, double & out) {
+    auto it = info_.hardware_parameters.find(name);
+    if (it != info_.hardware_parameters.end()) out = std::stod(it->second);
+  };
+  read_double("coast_enter_ratio", coast_enter_ratio_);
+  read_double("coast_exit_ratio", coast_exit_ratio_);
+  read_double("coast_min_speed", coast_min_speed_);
+  if (coast_exit_ratio_ > coast_enter_ratio_) {
+    RCLCPP_WARN(rclcpp::get_logger("SparkCanHardware"),
+      "coast_exit_ratio %.2f > coast_enter_ratio %.2f, clamping exit to enter.",
+      coast_exit_ratio_, coast_enter_ratio_);
+    coast_exit_ratio_ = coast_enter_ratio_;
+  }
+
   // Drivetrain conversion constants
   //   wheel_rad_s = motor_rpm * (2pi/60) / gear_ratio
   //   motor_rpm   = wheel_rad_s * (60/2pi) * gear_ratio
@@ -109,8 +125,10 @@ hardware_interface::CallbackReturn SparkCanHardware::on_init(
     wheel.joint_name = joint.name;
     wheel.can_id     = static_cast<uint8_t>(std::stoi(joint.parameters.at("can_id")));
     wheel.inverted   = (joint.parameters.at("inverted") == "true");
+    auto coast_it = joint.parameters.find("coast_on_turn");
+    wheel.coast_on_turn = (coast_it != joint.parameters.end() && coast_it->second == "true");
 
-    // Make sure each joint has exactly 1 command interface (velocity) and 4 state interfaces (position, velocity, voltage, online)
+    // Make sure each joint has exactly 1 command interface (velocity) and 5 state interfaces (position, velocity, voltage, online, coasting)
     if (joint.command_interfaces.size() != 1 ||
         joint.command_interfaces[0].name != hardware_interface::HW_IF_VELOCITY)
     {
@@ -118,16 +136,17 @@ hardware_interface::CallbackReturn SparkCanHardware::on_init(
         "Joint '%s' must have exactly one velocity command interface.", joint.name.c_str());
       return hardware_interface::CallbackReturn::ERROR;
     }
-    if (joint.state_interfaces.size() != 4) {
+    if (joint.state_interfaces.size() != 5) {
       RCLCPP_ERROR(rclcpp::get_logger("SparkCanHardware"),
-        "Joint '%s' must have exactly four state interfaces (position, velocity, voltage, online).",
+        "Joint '%s' must have exactly five state interfaces (position, velocity, voltage, online, coasting).",
         joint.name.c_str());
       return hardware_interface::CallbackReturn::ERROR;
     }
 
     RCLCPP_INFO(rclcpp::get_logger("SparkCanHardware"),
-      "  joint: %-30s  CAN ID: %d  inverted: %s",
-      joint.name.c_str(), wheel.can_id, wheel.inverted ? "yes" : "no");
+      "  joint: %-30s  CAN ID: %d  inverted: %s  coast_on_turn: %s",
+      joint.name.c_str(), wheel.can_id, wheel.inverted ? "yes" : "no",
+      wheel.coast_on_turn ? "yes" : "no");
   }
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -179,7 +198,8 @@ void SparkCanHardware::apply_config(WheelHandle & wheel, bool burn_flash)
   wheel.spark->SetMotorType(MotorType::kBrushless);
 
   // Brake mode: when velocity command is zero, actively resist motion.
-  wheel.spark->SetIdleMode(IdleMode::kBrake);
+  // Coast instead if reconfigured mid-turn.
+  wheel.spark->SetIdleMode(wheel.coasting ? IdleMode::kCoast : IdleMode::kBrake);
 
   // Velocity closed-loop control mode on the SPARK's onboard PID.
   wheel.spark->SetCtrlType(CtrlType::kVelocity);
@@ -293,6 +313,7 @@ SparkCanHardware::export_state_interfaces()
     // Not used by diff_drive; read by storm_telemetry via /dynamic_joint_states
     interfaces.emplace_back(wheel.joint_name, "voltage", &wheel.state_voltage);
     interfaces.emplace_back(wheel.joint_name, "online", &wheel.state_online);
+    interfaces.emplace_back(wheel.joint_name, "coasting", &wheel.state_coasting);
   }
   return interfaces;
 }
@@ -320,6 +341,7 @@ hardware_interface::CallbackReturn SparkCanHardware::on_activate(
     wheel.state_vel = 0.0;
     wheel.state_voltage = 0.0;
   }
+  turning_ = false;
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -414,6 +436,8 @@ hardware_interface::return_type SparkCanHardware::write(
     //Send a single static heartbeat frame to keep all CAN motor watchdogs happy
     SparkBase::Heartbeat();
 
+    update_turning();
+
     //Update the control commands for each wheel
     for (auto & wheel : wheels_) {
       if (!wheel.spark || !wheel.online) continue;
@@ -421,6 +445,18 @@ hardware_interface::return_type SparkCanHardware::write(
       if (wheel.needs_config) {
         apply_config(wheel, false);
         wheel.needs_config = false;
+      }
+
+      // Idle mode is a parameter write, so only send it on a change
+      const bool coast = wheel.coast_on_turn && turning_;
+      if (coast != wheel.coasting) {
+        wheel.spark->SetIdleMode(coast ? IdleMode::kCoast : IdleMode::kBrake);
+        wheel.coasting = coast;
+        wheel.state_coasting = coast ? 1.0 : 0.0;
+      }
+      if (wheel.coasting) {
+        wheel.spark->SetDutyCycle(0.0f);
+        continue;
       }
 
       // Guard against a NaN/inf command (e.g. a misbehaving controller):
@@ -449,12 +485,46 @@ hardware_interface::return_type SparkCanHardware::write(
   return hardware_interface::return_type::OK;
 }
 
+//update_turning
+// Each side gets one command from diff_drive, so max/min are the two sides.
+
+void SparkCanHardware::update_turning()
+{
+  double hi = -std::numeric_limits<double>::infinity();
+  double lo = std::numeric_limits<double>::infinity();
+  for (const auto & wheel : wheels_) {
+    if (!std::isfinite(wheel.cmd_vel)) continue;
+    hi = std::max(hi, wheel.cmd_vel);
+    lo = std::min(lo, wheel.cmd_vel);
+  }
+
+  const double speed = std::abs(hi) + std::abs(lo);
+  bool turning = false;
+  if (std::isfinite(speed) && speed > coast_min_speed_) {
+    const double ratio = (hi - lo) / speed;
+    turning = ratio > (turning_ ? coast_exit_ratio_ : coast_enter_ratio_);
+  }
+
+  if (turning != turning_) {
+    RCLCPP_INFO(rclcpp::get_logger("SparkCanHardware"),
+      "Turn %s, middle wheels %s.", turning ? "start" : "end",
+      turning ? "coasting" : "driving");
+    turning_ = turning;
+  }
+}
+
 //stop_all
 
 void SparkCanHardware::stop_all()
 {
+  turning_ = false;
   for (auto & wheel : wheels_) {
     if (wheel.spark) {
+      if (wheel.coasting) {
+        wheel.spark->SetIdleMode(IdleMode::kBrake);
+        wheel.coasting = false;
+        wheel.state_coasting = 0.0;
+      }
       // SetDutyCycle(0) is the most reliable way to command a hard stop,
       // bypassing the velocity PID entirely.
       wheel.spark->SetDutyCycle(0.0f);

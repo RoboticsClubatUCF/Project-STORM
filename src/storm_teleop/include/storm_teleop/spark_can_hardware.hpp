@@ -37,10 +37,14 @@ struct WheelHandle
   double state_vel{0.0};  // state:   wheel angular velocity [rad/s]
   double state_voltage{0.0};  // state: SPARK input (battery) voltage [V]
   double state_online{0.0};   // state: 1 if status frames are arriving
+  double state_coasting{0.0}; // state: 1 while coasting through a turn
 
   bool online{false};
   bool needs_config{false};  // set when a SPARK comes back or reports a reset
   std::chrono::steady_clock::time_point configured_at{};
+
+  bool coast_on_turn{false};  // coast this wheel during hard turns (middle wheels)
+  bool coasting{false};      // currently coasting
 };
 
 class SparkCanHardware : public hardware_interface::SystemInterface
@@ -98,6 +102,13 @@ private:
   // Status 1 arrives every ~20 ms, so 100 ms is 5 missed frames
   int status_timeout_ms_{100};
 
+  // Turn ratio = (max - min) / (|max| + |min|) over wheel commands: 0 straight, 1 point turn.
+  // coast_on_turn wheels coast above enter, drive again below exit.
+  double coast_enter_ratio_{0.5};
+  double coast_exit_ratio_{0.3};
+  double coast_min_speed_{0.5};  // rad/s, below this the wheels brake normally
+  bool turning_{false};
+
   // Sticky fault bit set after the SPARK reboots (REV FaultID kHasReset)
   static constexpr uint16_t kFaultHasReset = 1u << 9;
 
@@ -129,6 +140,9 @@ private:
 
   /// Push motor type, brake mode, control mode, inversion and PID to one SPARK.
   void apply_config(WheelHandle & wheel, bool burn_flash);
+
+  /// Update turning_ from this cycle's commands, with hysteresis.
+  void update_turning();
 
   /// Stop all motors immediately (duty cycle 0)
   void stop_all();

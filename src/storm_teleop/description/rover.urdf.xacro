@@ -159,6 +159,11 @@
       <!-- SPARK MAX onboard velocity PID gains live in config/sparks.yaml.
            The launch file resolves that file's absolute path into this param. -->
       <param name="spark_config">$(arg spark_config)</param>
+      <!-- coast_on_turn wheels coast during hard turns so the rover doesn't tip.
+           Turn ratio is 0 straight, 1 point turn. Enter above 1 disables it. -->
+      <param name="coast_enter_ratio">0.5</param>
+      <param name="coast_exit_ratio">0.3</param>
+      <param name="coast_min_speed">0.5</param>  <!-- rad/s -->
     </hardware>
 
     <!-- RIGHT SIDE (looking from behind the rover) -->
@@ -170,15 +175,18 @@
       <state_interface name="velocity"/>
       <state_interface name="voltage"/>
       <state_interface name="online"/>
+      <state_interface name="coasting"/>
     </joint>
     <joint name="middle_right_wheel_joint">
       <param name="can_id">5</param>
       <param name="inverted">false</param>
+      <param name="coast_on_turn">true</param>
       <command_interface name="velocity"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
       <state_interface name="voltage"/>
       <state_interface name="online"/>
+      <state_interface name="coasting"/>
     </joint>
     <joint name="front_right_wheel_joint">
       <param name="can_id">6</param>
@@ -188,6 +196,7 @@
       <state_interface name="velocity"/>
       <state_interface name="voltage"/>
       <state_interface name="online"/>
+      <state_interface name="coasting"/>
     </joint>
 
     <!-- LEFT SIDE -->
@@ -199,15 +208,18 @@
       <state_interface name="velocity"/>
       <state_interface name="voltage"/>
       <state_interface name="online"/>
+      <state_interface name="coasting"/>
     </joint>
     <joint name="middle_left_wheel_joint">
       <param name="can_id">2</param>
       <param name="inverted">true</param>
+      <param name="coast_on_turn">true</param>
       <command_interface name="velocity"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
       <state_interface name="voltage"/>
       <state_interface name="online"/>
+      <state_interface name="coasting"/>
     </joint>
     <joint name="back_left_wheel_joint">
       <param name="can_id">3</param>
@@ -217,6 +229,7 @@
       <state_interface name="velocity"/>
       <state_interface name="voltage"/>
       <state_interface name="online"/>
+      <state_interface name="coasting"/>
     </joint>
   </ros2_control>
 
