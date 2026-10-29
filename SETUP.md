@@ -72,7 +72,7 @@ launcher; teleop itself never starts on its own):
 
 ```bash
 mkdir -p ~/.config/systemd/user
-cp systemd/storm-rover-base.service ~/.config/systemd/user/
+cp ~/Project-STORM/src/storm_teleop/systemd/storm-rover-base.service ~/.config/systemd/user/
 systemctl --user daemon-reload
 systemctl --user enable --now storm-rover-base.service
 sudo loginctl enable-linger $USER
