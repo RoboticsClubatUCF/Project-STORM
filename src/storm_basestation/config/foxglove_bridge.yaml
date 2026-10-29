@@ -18,9 +18,15 @@ foxglove_bridge:
       - "^/joint_states$"
       - "^/joy$"
       - "^/diff_drive_controller/cmd_vel_unstamped$"
+      - "^/storm/teleop/status$"
 
-    # Read-only: viewers can't publish, call services or change params.
+    # Only the dashboard's teleop start/stop services are callable
+    service_whitelist:
+      - "^/storm/teleop/.*"
+
+    # Read-only except teleop start/stop: viewers can't publish or change params.
     # Driving stays on /joy over DDS.
     capabilities:
       - connectionGraph
       - assets
+      - services

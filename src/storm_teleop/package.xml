@@ -29,6 +29,10 @@
   <depend>joy</depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
+
+  <!-- teleop_launcher: dashboard start/stop -->
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>storm_interfaces</exec_depend>
   <depend>teleop_twist_joy</depend>
 
   <!-- URDF / description -->

@@ -1,0 +1,31 @@
+# =============================================================================
+# storm-rover-base.service: foxglove_bridge, telemetry and teleop_launcher at
+# boot, as a systemd user service on the rover. Teleop itself is NOT started;
+# press Start on the dashboard.
+#
+# Install (once, as the user that owns the repo):
+#   mkdir -p ~/.config/systemd/user
+#   cp systemd/storm-rover-base.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now storm-rover-base.service
+#   sudo loginctl enable-linger $USER   # start at boot without logging in
+#
+# Logs:  journalctl --user -u storm-rover-base -f
+# Assumes the repo is at ~/Project-STORM; edit ExecStart if not.
+# =============================================================================
+[Unit]
+Description=STORM rover base layer (bridge, telemetry, teleop launcher)
+After=network-online.target
+
+[Service]
+Environment=ROS_DOMAIN_ID=42
+ExecStart=/bin/bash -lc 'source /opt/ros/humble/setup.bash && source %h/Project-STORM/install/setup.bash && exec ros2 launch storm_teleop rover_base.launch.py'
+# SIGINT to ros2 launch first so the launcher can stop teleop cleanly
+KillSignal=SIGINT
+KillMode=mixed
+TimeoutStopSec=30
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

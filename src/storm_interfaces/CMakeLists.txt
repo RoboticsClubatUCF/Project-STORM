@@ -8,6 +8,8 @@ find_package(std_msgs REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/BatteryStatus.msg"
   "msg/SystemTelemetry.msg"
+  "msg/TeleopStatus.msg"
+  "srv/StartTeleop.srv"
   DEPENDENCIES std_msgs
 )
 

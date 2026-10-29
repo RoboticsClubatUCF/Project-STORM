@@ -1,8 +1,18 @@
 "use client";
 
-import { useRover, type BatteryStatus, type SystemTelemetry } from "@/lib/useRover";
+import { useState } from "react";
+import {
+  useRover,
+  type BatteryStatus,
+  type Rover,
+  type ServiceResult,
+  type SystemTelemetry,
+  type TeleopProfile,
+} from "@/lib/useRover";
 
 const ROVER_WS = process.env.NEXT_PUBLIC_ROVER_WS ?? "ws://rover.local:8765";
+
+const PROFILE_LABELS: Record<TeleopProfile, string> = { teleop: "Teleop", spaceu: "SpaceU (full turbo)" };
 
 const BATTERY_LEVELS = ["Unknown", "OK", "Low", "Critical"];
 const DIAG_LEVELS = ["OK", "Warn", "Error", "Stale"];
@@ -25,6 +35,91 @@ function Row({ label, value }: { label: string; value: string }) {
       <span className="label">{label}</span>
       <span className="value">{value}</span>
     </div>
+  );
+}
+
+function TeleopCard({ rover }: { rover: Rover }) {
+  const [profile, setProfile] = useState<TeleopProfile>("teleop");
+  const [useJoy, setUseJoy] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [reply, setReply] = useState("");
+
+  const t = rover.teleop;
+  const running = t?.running ?? false;
+  const known = t !== undefined && rover.teleopServices;
+  const status = !t ? "Unknown" : running ? "Running" : t.message.startsWith("exited") ? "Exited" : "Stopped";
+  const statusClass = !t ? "" : running ? "diag-0" : status === "Exited" ? "diag-2" : "";
+
+  const run = async (action: () => Promise<ServiceResult>) => {
+    setBusy(true);
+    try {
+      const r = await action();
+      setReply(r.message);
+    } catch (e) {
+      setReply(`Failed: ${(e as Error).message}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const onStop = () => {
+    if (!window.confirm("Stop teleop? The rover stops immediately.")) return;
+    run(rover.stopTeleop);
+  };
+
+  return (
+    <section className="card">
+      <h2>
+        Teleop <span className={`pill ${statusClass}`}>{status}</span>
+      </h2>
+      {running && t && (
+        <>
+          <Row label="Profile" value={PROFILE_LABELS[t.profile as TeleopProfile] ?? t.profile} />
+          <Row label="Controller" value={t.use_joy ? "On rover" : "Base station"} />
+          <Row label="Uptime" value={fmtUptime(t.uptime_s)} />
+        </>
+      )}
+      {!running && t && t.message && <Row label="Last" value={t.message} />}
+
+      <div className="controls">
+        <select
+          value={profile}
+          onChange={(e) => setProfile(e.target.value as TeleopProfile)}
+          disabled={running || busy}
+        >
+          {(Object.keys(PROFILE_LABELS) as TeleopProfile[]).map((p) => (
+            <option key={p} value={p}>
+              {PROFILE_LABELS[p]}
+            </option>
+          ))}
+        </select>
+        <label className="check">
+          <input
+            type="checkbox"
+            checked={useJoy}
+            onChange={(e) => setUseJoy(e.target.checked)}
+            disabled={running || busy}
+          />
+          Controller on rover (use_joy)
+        </label>
+      </div>
+      <div className="controls">
+        <button
+          className="btn btn-start"
+          onClick={() => run(() => rover.startTeleop(profile, useJoy))}
+          disabled={!known || running || busy}
+        >
+          Start
+        </button>
+        <button className="btn btn-stop" onClick={onStop} disabled={!known || !running || busy}>
+          Stop
+        </button>
+      </div>
+      {!rover.teleopServices && rover.connection === "connected" && (
+        <p className="muted">Teleop launcher not available on the rover</p>
+      )}
+      {reply && <p className="muted">{reply}</p>}
+    </section>
   );
 }
 
@@ -75,6 +170,7 @@ export default function Page() {
       </header>
 
       <div className="grid">
+        <TeleopCard rover={rover} />
         <BatteryCard b={rover.battery} />
         <SystemCard s={rover.system} />
         <section className="card">

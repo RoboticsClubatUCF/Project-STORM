@@ -114,6 +114,20 @@ Launch args:
 - `can_interface` (default `can0`, used by the plugin and can_health_node)
 - `joy_overrides` (optional YAML layered over `joy_teleop.yaml`)
 
+### Start from the dashboard
+
+`launch/rover_base.launch.py` (run at boot by `systemd/storm-rover-base.service`)
+starts the bridge, telemetry and `teleop_launcher`. Teleop only starts when the
+dashboard calls `/storm/teleop/start` (`storm_interfaces/srv/StartTeleop`:
+profile `teleop` or `spaceu`, `use_joy`); `/storm/teleop/stop` sends SIGINT so
+ros2_control zeroes the motors. State is on `/storm/teleop/status`. A crashed
+teleop is reported, never restarted.
+
+```bash
+ros2 service call /storm/teleop/start storm_interfaces/srv/StartTeleop "{profile: teleop, use_joy: false}"
+ros2 service call /storm/teleop/stop std_srvs/srv/Trigger
+```
+
 ### Full-speed turbo (SpaceU)
 
 ```bash

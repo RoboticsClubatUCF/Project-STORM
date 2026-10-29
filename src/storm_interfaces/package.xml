@@ -3,7 +3,7 @@
 <package format="3">
   <name>storm_interfaces</name>
   <version>0.1.0</version>
-  <description>Custom messages for the STORM rover</description>
+  <description>Custom messages and services for the STORM rover</description>
   <maintainer email="vcadicamo@icloud.com">Vincent Cadicamo</maintainer>
   <license>MIT</license>
 

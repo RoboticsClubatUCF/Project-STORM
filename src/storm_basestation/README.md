@@ -25,6 +25,10 @@ ros2 launch storm_basestation bridge.launch.py
 
 Needs `ros-humble-foxglove-bridge` (`rosdep install` picks it up).
 
+With `storm-rover-base.service` (see `storm_teleop`), the bridge runs at boot
+from `rover_base.launch.py` and the launcher starts teleop with
+`enable_bridge:=false`.
+
 ## Network
 
 Everything on the radio link has a static address on 192.168.1.0/24, listed
@@ -144,7 +148,7 @@ Join `STORM-BASE`, then either:
 
 | File | What it does |
 |------|--------------|
-| `config/foxglove_bridge.yaml` | Port, topic whitelist, read-only capabilities |
+| `config/foxglove_bridge.yaml` | Port, topic whitelist, read-only except `/storm/teleop/*` services |
 | `config/network.env` | Static IPs of the Jetsons and radios |
 | `config/fastdds_peers.xml` | Unicast DDS discovery between rover and base station |
 | `launch/bridge.launch.py` | foxglove_bridge (rover) |

@@ -62,6 +62,7 @@ install(TARGETS spark_can_hardware
 
 # Bring-up script + systemd unit (installed to share for reference/copying)
 install(PROGRAMS scripts/can0_up.sh scripts/bt_joy_failsafe.sh scripts/joy_watchdog.py
+  scripts/teleop_launcher.py
   DESTINATION lib/${PROJECT_NAME}
 )
 install(DIRECTORY scripts systemd udev

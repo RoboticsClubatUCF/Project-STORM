@@ -1,0 +1,10 @@
+# Start rover teleop from the dashboard (storm_teleop/teleop_launcher.py)
+
+string PROFILE_TELEOP=teleop
+string PROFILE_SPACEU=spaceu
+
+string profile   # PROFILE_TELEOP or PROFILE_SPACEU
+bool use_joy     # true: controller on the rover, false: on the base station
+---
+bool success
+string message

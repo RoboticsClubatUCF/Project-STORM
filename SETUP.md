@@ -67,9 +67,26 @@ sudo cp scripts/bt_joy_failsafe.sh /usr/local/bin/ && sudo chmod +x /usr/local/b
 sudo cp udev/99-storm-bt-joy.rules /etc/udev/rules.d/ && sudo udevadm control --reload
 ```
 
-**Each session:**
+**7. Base layer at boot** (bridge, telemetry and the dashboard's teleop
+launcher; teleop itself never starts on its own):
 
 ```bash
+mkdir -p ~/.config/systemd/user
+cp systemd/storm-rover-base.service ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now storm-rover-base.service
+sudo loginctl enable-linger $USER
+```
+
+**Each session:** open the dashboard, pick Teleop or SpaceU, tick
+"Controller on rover" if the controller is paired to the rover, and press
+Start. Logs: `journalctl --user -u storm-rover-base -f`.
+
+To launch by hand instead, stop the base layer first (otherwise two bridges
+fight over port 8765):
+
+```bash
+systemctl --user stop storm-rover-base.service
 ros2 launch storm_teleop teleop.launch.py use_joy:=false   # controller on the base station
 ros2 launch storm_teleop teleop.launch.py                  # controller paired to the rover
 ```
