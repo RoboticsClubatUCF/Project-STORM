@@ -41,6 +41,13 @@ export type TeleopStatus = {
   message: string;
 };
 
+export type Twist = {
+  linear: { x: number; y: number; z: number };
+  angular: { x: number; y: number; z: number };
+};
+
+export type Joy = { axes: number[]; buttons: number[] };
+
 export type TeleopProfile = "teleop" | "spaceu";
 
 export type ServiceResult = { success: boolean; message: string };
@@ -54,6 +61,10 @@ export type RoverState = {
   battery?: BatteryStatus;
   system?: SystemTelemetry;
   teleop?: TeleopStatus;
+  cmdVel?: Twist;
+  cmdVelAt?: number;
+  joy?: Joy;
+  joyAt?: number;
   diagnostics: Record<string, DiagnosticStatus>;
   teleopServices: boolean;
 };
@@ -63,7 +74,15 @@ export type Rover = RoverState & {
   stopTeleop: () => Promise<ServiceResult>;
 };
 
-const TOPICS = ["/telemetry/battery", "/telemetry/system", "/diagnostics", "/storm/teleop/status"];
+const CMD_VEL_TOPIC = "/diff_drive_controller/cmd_vel_unstamped";
+const TOPICS = [
+  "/telemetry/battery",
+  "/telemetry/system",
+  "/diagnostics",
+  "/storm/teleop/status",
+  CMD_VEL_TOPIC,
+  "/joy",
+];
 const RECONNECT_MS = 2000;
 // foxglove_bridge 3.x (Foxglove SDK) speaks foxglove.sdk.v1, older bridges foxglove.websocket.v1
 const SUBPROTOCOLS = ["foxglove.sdk.v1", FoxgloveClient.SUPPORTED_SUBPROTOCOL];
@@ -182,6 +201,12 @@ export function useRover(url: string): Rover {
               return { ...s, system: msg as SystemTelemetry };
             case "/storm/teleop/status":
               return { ...s, teleop: msg as TeleopStatus };
+            case CMD_VEL_TOPIC:
+              return { ...s, cmdVel: msg as Twist, cmdVelAt: Date.now() };
+            case "/joy": {
+              const j = msg as Joy;
+              return { ...s, joy: { axes: Array.from(j.axes), buttons: Array.from(j.buttons) }, joyAt: Date.now() };
+            }
             default: {
               const diagnostics = { ...s.diagnostics };
               for (const d of (msg as DiagnosticArray).status) diagnostics[d.name] = d;
