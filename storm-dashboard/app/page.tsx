@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useRover,
   type BatteryStatus,
+  type Joy,
   type Rover,
   type ServiceResult,
   type SystemTelemetry,
   type TeleopProfile,
+  type Twist,
 } from "@/lib/useRover";
 
 const ROVER_WS = process.env.NEXT_PUBLIC_ROVER_WS ?? "ws://rover.local:8765";
@@ -16,6 +18,16 @@ const PROFILE_LABELS: Record<TeleopProfile, string> = { teleop: "Teleop", spaceu
 
 const BATTERY_LEVELS = ["Unknown", "OK", "Low", "Critical"];
 const DIAG_LEVELS = ["OK", "Warn", "Error", "Stale"];
+
+// controllers.yaml hard ceilings
+const MAX_LINEAR = 5.4;
+const MAX_ANGULAR = 12.5;
+// Matches diff_drive_controller cmd_vel_timeout
+const CMD_STALE_MS = 500;
+const JOY_STALE_MS = 1000;
+// joy_teleop.yaml enable_button / enable_turbo_button
+const ENABLE_BUTTON = 0;
+const TURBO_BUTTON = 5;
 
 function fmt(value: number | undefined, digits = 1, unit = ""): string {
   if (value === undefined || Number.isNaN(value)) return "n/a";
@@ -35,6 +47,57 @@ function Row({ label, value }: { label: string; value: string }) {
       <span className="label">{label}</span>
       <span className="value">{value}</span>
     </div>
+  );
+}
+
+function useNow(intervalMs: number): number {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), intervalMs);
+    return () => clearInterval(id);
+  }, [intervalMs]);
+  return now;
+}
+
+function Bar({ label, value, max, unit }: { label: string; value?: number; max: number; unit: string }) {
+  const frac = value === undefined ? 0 : Math.max(-1, Math.min(1, value / max));
+  return (
+    <div className="bar-row">
+      <div className="row">
+        <span className="label">{label}</span>
+        <span className="value">{fmt(value, 2, unit)}</span>
+      </div>
+      <div className="bar">
+        <div
+          className="bar-fill"
+          style={{ left: `${50 + Math.min(frac, 0) * 50}%`, width: `${Math.abs(frac) * 50}%` }}
+        />
+        <div className="bar-zero" />
+      </div>
+    </div>
+  );
+}
+
+function DriveCard({ rover }: { rover: Rover }) {
+  const now = useNow(200);
+  const cmdLive = rover.cmdVelAt !== undefined && now - rover.cmdVelAt < CMD_STALE_MS;
+  const joyLive = rover.joyAt !== undefined && now - rover.joyAt < JOY_STALE_MS;
+  const v: Twist | undefined = cmdLive ? rover.cmdVel : undefined;
+  const j: Joy | undefined = joyLive ? rover.joy : undefined;
+  const held = (b: number) => (j ? (j.buttons[b] ? "Held" : "Released") : "n/a");
+
+  return (
+    <section className="card">
+      <h2>
+        Drive command <span className={`pill ${cmdLive ? "diag-0" : ""}`}>{cmdLive ? "Live" : "Idle"}</span>
+      </h2>
+      <Bar label="Linear x" value={v?.linear.x} max={MAX_LINEAR} unit=" m/s" />
+      <Bar label="Angular z (+ = left)" value={v?.angular.z} max={MAX_ANGULAR} unit=" rad/s" />
+      <h3>Controller {j ? "" : "(no /joy)"}</h3>
+      <Row label="Enable (A)" value={held(ENABLE_BUTTON)} />
+      <Row label="Turbo (RB)" value={held(TURBO_BUTTON)} />
+      <Row label="Left stick X / Y" value={j ? `${fmt(j.axes[0], 2)} / ${fmt(j.axes[1], 2)}` : "n/a"} />
+    </section>
   );
 }
 
@@ -171,6 +234,7 @@ export default function Page() {
 
       <div className="grid">
         <TeleopCard rover={rover} />
+        <DriveCard rover={rover} />
         <BatteryCard b={rover.battery} />
         <SystemCard s={rover.system} />
         <section className="card">

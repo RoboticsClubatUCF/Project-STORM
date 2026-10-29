@@ -173,3 +173,32 @@ h3 {
 .btn-stop {
   background: var(--error);
 }
+
+.bar-row {
+  margin-bottom: 8px;
+}
+
+.bar {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--border);
+}
+
+.bar-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 4px;
+  background: var(--ok);
+}
+
+.bar-zero {
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--muted);
+}
