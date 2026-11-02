@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="storm">
+  <xacro:arg name="hardware" default="gazebo"/>
+  <xacro:include filename="$(find storm_description)/urdf/storm.urdf.xacro"/>
+  <xacro:include filename="$(find storm_gazebo)/urdf/gazebo_plugins.xacro"/>
+</robot>

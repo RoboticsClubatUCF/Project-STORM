@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="urc_rover">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="storm">
 
+  <xacro:arg name="hardware" default="mock"/>
+  <xacro:arg name="can_interface" default="can0"/>
+  <xacro:arg name="lidar" default="true"/>
   <!-- All units: meters, kg, radians -->
 
   <!-- Chassis: simple box -->
@@ -31,6 +34,7 @@
 
   <xacro:macro name="box_inertia" params="m x y z">
     <inertial>
+      <origin xyz="0 0 ${z/2}"/>
       <mass value="${m}"/>
       <inertia ixx="${m*(y*y+z*z)/12}" ixy="0" ixz="0"
                iyy="${m*(x*x+z*z)/12}" iyz="0"
@@ -124,75 +128,13 @@
   <xacro:wheel name="middle_left_wheel"  x_pos="${wheel_x_middle}" y_pos="${wheel_y_offset}"/>
   <xacro:wheel name="back_left_wheel"    x_pos="${wheel_x_back}"   y_pos="${wheel_y_offset}"/>
 
-  <!-- ROS2_CONTROL -->
-
-  <!--
-    This block tells controller_manager to load SparkCanHardware and wire
-    each joint's velocity command / position+velocity state interfaces.
-
-    Hardware-level params are read by on_init() in spark_can_hardware.cpp.
-    Per-joint params (can_id, inverted) are read from info_.joints[i].parameters.
-  -->
-
-  <ros2_control name="SparkCanSystem" type="system">
-    <hardware>
-      <plugin>storm_teleop/SparkCanHardware</plugin>
-      <param name="can_interface">can0</param>
-      <param name="gear_ratio">81.0</param>
-      <!-- SPARK MAX onboard velocity PID starting values.
-           kF = 1/free_speed_RPM ≈ 1/5676 for NEO V1.1.
-           Tune on real hardware — these are conservative first-pass values. -->
-      <param name="pid_kp">0.0001</param>
-      <param name="pid_ki">0.0</param>
-      <param name="pid_kd">0.0</param>
-      <param name="pid_kf">0.000176</param>
-    </hardware>
-
-    <!-- RIGHT SIDE (looking from behind the rover) -->
-    <joint name="back_right_wheel_joint">
-      <param name="can_id">1</param>
-      <param name="inverted">false</param>
-      <command_interface name="velocity"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-    <joint name="middle_right_wheel_joint">
-      <param name="can_id">2</param>
-      <param name="inverted">false</param>
-      <command_interface name="velocity"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-    <joint name="front_right_wheel_joint">
-      <param name="can_id">3</param>
-      <param name="inverted">false</param>
-      <command_interface name="velocity"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-
-    <!-- LEFT SIDE -->
-    <joint name="front_left_wheel_joint">
-      <param name="can_id">4</param>
-      <param name="inverted">true</param>
-      <command_interface name="velocity"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-    <joint name="middle_left_wheel_joint">
-      <param name="can_id">5</param>
-      <param name="inverted">true</param>
-      <command_interface name="velocity"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-    <joint name="back_left_wheel_joint">
-      <param name="can_id">6</param>
-      <param name="inverted">true</param>
-      <command_interface name="velocity"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-  </ros2_control>
-
+  <xacro:include filename="$(find storm_description)/urdf/storm.ros2_control.xacro"/>
+  <xacro:storm_control backend="$(arg hardware)" can_interface="$(arg can_interface)"/>
+  <xacro:if value="$(arg lidar)">
+    <link name="lidar_link">
+      <visual><geometry><cylinder radius="0.04" length="0.04"/></geometry></visual>
+      <inertial><mass value="0.1"/><inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/></inertial>
+    </link>
+    <joint name="lidar_joint" type="fixed"><parent link="base_link"/><child link="lidar_link"/><origin xyz="0 0 0.27"/></joint>
+  </xacro:if>
 </robot>

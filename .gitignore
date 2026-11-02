@@ -1,4 +1,9 @@
-log/
 build/
 install/
+log/
+.deps/
 .cache/
+__pycache__/
+.pytest_cache/
+*.pyc
+.ruff_cache/

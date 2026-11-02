@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <gazebo reference="lidar_link">
+    <sensor name="lidar" type="gpu_lidar">
+      <topic>/scan</topic><gz_frame_id>lidar_link</gz_frame_id>
+      <update_rate>10</update_rate><always_on>true</always_on>
+      <lidar>
+        <scan><horizontal><samples>720</samples><resolution>1</resolution><min_angle>-${pi}</min_angle><max_angle>${pi}</max_angle></horizontal></scan>
+        <range><min>0.12</min><max>15.0</max><resolution>0.01</resolution></range>
+      </lidar>
+    </sensor>
+  </gazebo>
+  <gazebo>
+    <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find storm_control)/config/controllers.yaml</parameters>
+      <ros><remapping>/diff_drive_controller/odom:=/odom</remapping><remapping>/diff_drive_controller/cmd_vel:=/cmd_vel</remapping></ros>
+    </plugin>
+  </gazebo>
+</robot>

@@ -1,3 +1,5 @@
-# !/bin/bash
-
-colcon build --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_STANDARD=20
+#!/usr/bin/env bash
+set -eo pipefail
+cd "$(dirname "$0")/.."
+source /opt/ros/jazzy/setup.bash
+colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo "$@"

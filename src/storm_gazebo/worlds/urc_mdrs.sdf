@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <world name="urc_mdrs">
+    <!-- Real MDRS bare-earth terrain. See terrain/mdrs/provenance.json. -->
+    <physics name="default" type="ignored">
+      <max_step_size>0.001</max_step_size><real_time_factor>1.0</real_time_factor>
+    </physics>
+    <gravity>0 0 -9.80665</gravity>
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors"><render_engine>ogre2</render_engine></plugin>
+    <scene><ambient>0.55 0.5 0.43 1</ambient><background>0.65 0.77 0.88 1</background><shadows>true</shadows></scene>
+    <light name="sun" type="directional">
+      <pose>0 0 100 0 0 0</pose><diffuse>0.95 0.9 0.8 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular><direction>-0.5 0.2 -0.85</direction><cast_shadows>true</cast_shadows>
+    </light>
+    <model name="mdrs_usgs_terrain">
+      <static>true</static>
+      <link name="terrain">
+        <collision name="terrain_collision">
+          <geometry><mesh><uri>model://storm_gazebo/terrain/mdrs/mdrs_terrain.dae</uri></mesh></geometry>
+          <surface><friction><ode><mu>0.8</mu><mu2>0.8</mu2></ode></friction></surface>
+        </collision>
+        <visual name="terrain_visual">
+          <geometry><mesh><uri>model://storm_gazebo/terrain/mdrs/mdrs_terrain.dae</uri></mesh></geometry>
+          <material><ambient>0.55 0.34 0.19 1</ambient><diffuse>0.7 0.46 0.28 1</diffuse><specular>0.05 0.05 0.05 1</specular></material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>
