@@ -89,3 +89,13 @@ If the navigator remains inactive, check the scan and odometry first, then the
 transform from `map` to `base_footprint`. If a CLI command sees no topics,
 verify the sourced overlay and ROS domain in both terminals. Historical
 outcomes are recorded in [validation results](VALIDATION.md).
+
+## Sensor visual test
+
+Launch `ros2 launch storm_bringup simulation.launch.py environment:=urc truth_pose:=true`
+to open Gazebo and RViz with the simulator's pose as the reference. Check the
+rover, sensor frames, planar scan, VLP-16 cloud, and RGB and depth panes.
+The global plan appears after a Nav2 goal is accepted. Some depth pixels remain
+dark when the camera gets no return. Use the default pose mode for tests
+that measure wheel and SLAM drift. See the [sensor guide](SENSORS.md) for
+topic checks and physical lidar bringup.

@@ -11,6 +11,7 @@ pieces through the ROS package index so installed assets are discoverable.
 | `storm_hardware` | Exports the optional SPARK CAN system plugin. Converts motor RPM and rotations to wheel rad/s and radians. |
 | `storm_sparkcan_vendor` | Builds and installs the pinned CAN library when the physical driver is enabled. |
 | `storm_teleop` | `teleop.launch.py` translates deadman joystick input to stamped velocity commands. |
+| `storm_sensors` | `lidar.launch.py` starts the physical VLP-16 or serial Hokuyo and can publish a measured mount transform. |
 | `storm_navigation` | `navigation.launch.py` manages planning, control, recovery, smoothing, waypoints, and either SLAM or AMCL. `rviz.launch.py` opens the STORM view. |
 | `storm_gazebo` | `simulation.launch.py` starts Gazebo, spawns STORM, activates its controllers, and bridges simulated time and lidar. |
 | `storm_bringup` | `simulation.launch.py` assembles Gazebo and optional Nav2. `robot.launch.py` assembles mock or CAN control with optional Nav2. |
@@ -31,6 +32,9 @@ pieces through the ROS package index so installed assets are discoverable.
 Gazebo owns its controller manager in simulation. Mock and CAN launches use a
 standalone manager. Use one command producer at a time. The drive controller
 times out after 0.5 seconds, and the velocity smoother times out after 0.3 seconds.
+In optional `truth_pose` simulation mode, Gazebo supplies `/odom` and
+`odom → base_footprint`. Wheel odometry is available on `/wheel/odom`, and
+a static transform anchors `map` to `odom`.
 The lidar mount in the description is provisional for physical hardware.
 
 Arena navigation uses a static map layer. The MDRS profile uses a rolling

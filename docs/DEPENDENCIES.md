@@ -12,6 +12,7 @@ simulator. WSLg is needed for graphical windows under WSL.
 | Nav2 servers and plugins, SLAM Toolbox, RViz | Navigation, mapping, localization, and visualization | Navigation |
 | ros_gz_sim, ros_gz_bridge, gz_ros2_control | Simulation and ROS bridges | Gazebo |
 | joy, teleop_twist_joy | Manual joystick driving | Teleoperation |
+| velodyne_driver, velodyne_pointcloud, velodyne_laserscan, urg_node | Physical lidar drivers and VLP-16 scan conversion | Sensor package |
 | sparkcan, SocketCAN, SPARK MAX controllers | Physical CAN backend | Optional hardware build and bench use |
 | ament_cmake_pytest, pytest, PyYAML, ament_cmake_gtest | Package tests | Test builds |
 | NumPy and Pillow | Regenerating MDRS assets | Terrain generation only |
@@ -32,6 +33,6 @@ source install/setup.bash
 Use `bash devscripts/build_hardware.sh` in a fresh shell to enable the CAN
 plugin. The script fetches the pinned sparkcan revision and installs it into
 the overlay. Source `install/setup.bash` after building. Physical operation
-requires the robot's actual SocketCAN settings and a separate lidar driver.
+requires the robot's actual SocketCAN settings and a configured lidar.
 See the [hardware workflow](../README.md#physical-rover-integration) and
 [third-party notices](../THIRD_PARTY.md).

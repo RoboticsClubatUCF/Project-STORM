@@ -26,6 +26,7 @@ the Windows checkout is a source/review copy. The original repository is preserv
 | `storm_sparkcan_vendor` | Essential third-party CAN library, pinned upstream revision |
 | `storm_control` | Shared six-wheel controller configuration and mock/CAN manager launch |
 | `storm_teleop` | Deadman joystick, stamped velocity output |
+| `storm_sensors` | Physical VLP-16 and serial Hokuyo bench launch |
 | `storm_navigation` | Nav2, lifecycle management, SLAM, AMCL, maps, STORM RViz view |
 | `storm_gazebo` | Gazebo plugins, bridge, arena, optional real MDRS terrain |
 | `storm_bringup` | Application launch files combining the above |
@@ -108,7 +109,8 @@ change a host network interface. Then:
 ros2 launch storm_bringup robot.launch.py hardware:=can can_interface:=can0
 ```
 
-Bring up the real lidar driver separately: it must publish `sensor_msgs/LaserScan`
+Use the integrated VLP-16 launch in the [sensor guide](docs/SENSORS.md#vlp-16-with-nav2),
+or start a separate lidar driver. The driver must publish `sensor_msgs/LaserScan`
 on `scan` with a calibrated transform into `base_link`. The model's `lidar_link`
 mount is provisional and must match the sensor. Start navigation only when the
 scan, wheel feedback, and transforms are verified:
