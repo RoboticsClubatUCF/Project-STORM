@@ -1,5 +1,13 @@
 <?xml version="1.0"?>
 <sdf version="1.9"><world name="storm">
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <world_frame_orientation>ENU</world_frame_orientation>
+      <latitude_deg>0</latitude_deg><longitude_deg>0</longitude_deg>
+      <elevation>0</elevation><heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <plugin filename="gz-sim-imu-system" name="gz::sim::systems::Imu"/>
+    <plugin filename="gz-sim-navsat-system" name="gz::sim::systems::NavSat"/>
   <physics name="default" type="ignored"><max_step_size>0.001</max_step_size><real_time_factor>1.0</real_time_factor></physics>
   <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
   <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>

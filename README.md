@@ -6,6 +6,7 @@
 | [Dependencies and setup](docs/DEPENDENCIES.md) | Prepare a Jazzy workspace and choose a hardware backend |
 | [Adding components](docs/EXTENDING.md) | Add a ROS package, sensor, controller, or test world |
 | [Running tests](docs/TESTING.md) | Run package tests and reproduce simulation checks |
+| [Physical sensor bringup](docs/SENSORS.md) | Bench-test the VLP-16 or Hokuyo and check Jetson compatibility |
 | [MDRS terrain](docs/URC_TERRAIN.md) | Inspect the terrain source, coordinates, and limitations |
 | [Validation results](docs/VALIDATION.md) | See what has already been exercised |
 

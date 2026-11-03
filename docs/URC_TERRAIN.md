@@ -43,7 +43,8 @@ autonomous traversability. The rover has no articulated suspension model.
 - Origin at published MDRS habitat coordinates: 38.406458333 N,
   -110.791902778 E (WGS84).
 - Horizontal CRS: UTM zone 12N, EPSG:32612. World x points grid east and y grid
-  north; grid north differs slightly from true north. No GNSS sensor is added.
+  north; grid north differs slightly from true north. Simulated GNSS uses
+  the MDRS origin with an approximate altitude reference.
 - Origin UTM: E 518169.088, N 4250934.479 m.
 - World z=0 corresponds to center raster elevation 1372.995 m
   in the service's source elevation datum. Elevation is relative in simulation;

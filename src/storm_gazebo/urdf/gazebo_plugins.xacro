@@ -1,5 +1,58 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Provisional simulation mounts, independent of physical calibration. -->
+  <link name="imu_link"/>
+  <joint name="imu_link_joint" type="fixed">
+    <parent link="base_link"/><child link="imu_link"/><origin xyz="0 0 0.2" rpy="0 0 0"/>
+  </joint>
+  <link name="gps_link"/>
+  <joint name="gps_link_joint" type="fixed">
+    <parent link="base_link"/><child link="gps_link"/><origin xyz="0 0 0.25" rpy="0 0 0"/>
+  </joint>
+  <link name="rgbd_link"/>
+  <joint name="rgbd_link_joint" type="fixed">
+    <parent link="base_link"/><child link="rgbd_link"/><origin xyz="0.32 0 0.25" rpy="0 0.25 0"/>
+  </joint>
+  <link name="rgbd_optical_frame"/>
+  <joint name="rgbd_optical_frame_joint" type="fixed">
+    <parent link="rgbd_link"/><child link="rgbd_optical_frame"/><origin xyz="0 0 0" rpy="-${pi/2} 0 -${pi/2}"/>
+  </joint>
+  <gazebo reference="imu_link">
+    <sensor name="spatial_imu" type="imu">
+      <always_on>true</always_on><update_rate>50</update_rate>
+      <topic>/imu/data</topic><gz_frame_id>imu_link</gz_frame_id>
+    </sensor>
+  </gazebo>
+  <gazebo reference="gps_link">
+    <sensor name="spatial_gnss" type="navsat">
+      <always_on>true</always_on><update_rate>5</update_rate>
+      <topic>/gps/fix</topic><gz_frame_id>gps_link</gz_frame_id>
+    </sensor>
+  </gazebo>
+  <gazebo reference="rgbd_link">
+    <sensor name="rgbd" type="rgbd_camera">
+      <always_on>true</always_on><update_rate>10</update_rate>
+      <topic>/camera</topic><gz_frame_id>rgbd_optical_frame</gz_frame_id>
+      <camera>
+        <horizontal_fov>1.2</horizontal_fov>
+        <image><width>640</width><height>360</height></image>
+        <clip><near>0.2</near><far>20</far></clip>
+      </camera>
+    </sensor>
+  </gazebo>
+  <gazebo reference="lidar_link">
+    <sensor name="vlp16" type="gpu_lidar">
+      <always_on>true</always_on><update_rate>10</update_rate>
+      <topic>/vlp16</topic><gz_frame_id>lidar_link</gz_frame_id>
+      <lidar>
+        <scan>
+          <horizontal><samples>720</samples><resolution>1</resolution><min_angle>-${pi}</min_angle><max_angle>${pi}</max_angle></horizontal>
+          <vertical><samples>16</samples><resolution>1</resolution><min_angle>-${pi/12}</min_angle><max_angle>${pi/12}</max_angle></vertical>
+        </scan>
+        <range><min>0.9</min><max>100</max><resolution>0.01</resolution></range>
+      </lidar>
+    </sensor>
+  </gazebo>
   <gazebo reference="lidar_link">
     <sensor name="lidar" type="gpu_lidar">
       <topic>/scan</topic><gz_frame_id>lidar_link</gz_frame_id>
@@ -13,7 +66,18 @@
   <gazebo>
     <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
       <parameters>$(find storm_control)/config/controllers.yaml</parameters>
-      <ros><remapping>/diff_drive_controller/odom:=/odom</remapping><remapping>/diff_drive_controller/cmd_vel:=/cmd_vel</remapping></ros>
+      <ros>
+        <xacro:if value="$(arg truth_pose)"><remapping>/diff_drive_controller/odom:=/wheel/odom</remapping></xacro:if>
+        <xacro:unless value="$(arg truth_pose)"><remapping>/diff_drive_controller/odom:=/odom</remapping></xacro:unless>
+        <remapping>/diff_drive_controller/cmd_vel:=/cmd_vel</remapping>
+      </ros>
     </plugin>
+    <xacro:if value="$(arg truth_pose)">
+      <plugin filename="gz-sim-odometry-publisher-system" name="gz::sim::systems::OdometryPublisher">
+        <odom_frame>odom</odom_frame><robot_base_frame>base_footprint</robot_base_frame>
+        <odom_topic>/storm_truth/odom</odom_topic><tf_topic>/storm_truth/tf</tf_topic>
+        <odom_publish_frequency>50</odom_publish_frequency><dimensions>2</dimensions>
+      </plugin>
+    </xacro:if>
   </gazebo>
 </robot>

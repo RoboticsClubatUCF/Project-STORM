@@ -127,6 +127,57 @@ Visualization Manager:
       Value: /map_updates
     Use Timestamp: false
     Value: true
+  - Class: rviz_default_plugins/PointCloud2
+    Name: VLP-16 point cloud
+    Enabled: true
+    Value: true
+    Style: Points
+    Size (Pixels): 2
+    Color Transformer: FlatColor
+    Color: 80; 210; 255
+    Topic:
+      Reliability Policy: Best Effort
+      Value: /velodyne_points
+  - Class: rviz_default_plugins/Image
+    Name: RGB camera
+    Enabled: true
+    Value: true
+    Topic:
+      Reliability Policy: Best Effort
+      Value: /camera/image_raw
+  - Class: rviz_default_plugins/Image
+    Name: Depth camera
+    Enabled: true
+    Value: true
+    Normalize Range: false
+    Min Value: 0.2
+    Max Value: 20
+    Topic:
+      Reliability Policy: Best Effort
+      Value: /camera/depth/image_raw
+  - Class: rviz_default_plugins/Odometry
+    Name: Wheel odometry
+    Enabled: true
+    Value: true
+    Keep: 30
+    Position Tolerance: 0.15
+    Angle Tolerance: 0.2
+    Topic:
+      Reliability Policy: Best Effort
+      Value: /odom
+  - Class: rviz_default_plugins/Path
+    Name: Nav2 global plan
+    Enabled: true
+    Value: true
+    Topic:
+      Reliability Policy: Best Effort
+      Value: /plan
+  - Class: rviz_default_plugins/TF
+    Name: Sensor frames
+    Enabled: true
+    Value: true
+    Show Names: true
+    Marker Scale: 0.25
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -177,7 +228,7 @@ Visualization Manager:
       Scale: 54
       Target Frame: base_footprint
       Value: TopDownOrtho (rviz_default_plugins)
-      X: -5.409999847412109
+      X: 0
       Y: 0
     Saved: null
 Window Geometry:

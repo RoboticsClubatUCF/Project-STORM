@@ -20,6 +20,7 @@ from launch_ros.actions import Node
 
 def setup(context):
     pkg = share("storm_gazebo")
+    truth_pose = LC("truth_pose").perform(context) == "true"
     world = LC("world").perform(context)
     if not os.path.isfile(world):
         raise RuntimeError("Gazebo world does not exist: " + world)
@@ -33,7 +34,8 @@ def setup(context):
         + shlex.quote(world)
     )
     robot = xacro.process_file(
-        os.path.join(pkg, "urdf", "storm.gazebo.xacro"), mappings={"hardware": "gazebo"}
+        os.path.join(pkg, "urdf", "storm.gazebo.xacro"),
+        mappings={"hardware": "gazebo", "truth_pose": str(truth_pose).lower()},
     ).toxml()
     spawn = Node(
         package="ros_gz_sim",
@@ -57,7 +59,10 @@ def setup(context):
     drive = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["diff_drive_controller", "--controller-manager-timeout", "90"],
+        arguments=["diff_drive_controller", "--controller-manager-timeout", "90"] + (
+            ["--param-file", os.path.join(pkg, "config", "truth_controller.yaml")]
+            if truth_pose else []
+        ),
         output="screen",
     )
 
@@ -94,6 +99,15 @@ def setup(context):
             ],
             output="screen",
         ),
+        *([Node(
+            package="ros_gz_bridge", executable="parameter_bridge", name="storm_truth_bridge",
+            arguments=[
+                "/storm_truth/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry",
+                "/storm_truth/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V",
+            ],
+            remappings=[("/storm_truth/odom", "/odom"), ("/storm_truth/tf", "/tf")],
+            output="screen",
+        )] if truth_pose else []),
         RegisterEventHandler(OnProcessExit(target_action=spawn, on_exit=after(jsb))),
         RegisterEventHandler(OnProcessExit(target_action=jsb, on_exit=after(drive))),
         spawn,
@@ -111,6 +125,7 @@ def generate_launch_description():
                 ),
             ),
             DeclareLaunchArgument("spawn_z", default_value="0.03"),
+            DeclareLaunchArgument("truth_pose", default_value="false", choices=["true", "false"]),
             OpaqueFunction(function=setup),
         ]
     )
