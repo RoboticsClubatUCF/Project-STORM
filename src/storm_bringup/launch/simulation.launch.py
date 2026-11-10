@@ -1,6 +1,7 @@
 """STORM simulation + optional Nav2, with arena and real MDRS terrain presets."""
 
 import os
+
 from ament_index_python.packages import get_package_share_directory as share
 from launch import LaunchDescription
 from launch.actions import (
@@ -21,13 +22,19 @@ def setup(context):
         raise RuntimeError("truth_pose requires mode:=slam")
     nav = share("storm_navigation")
     gz = share("storm_gazebo")
+    outdoor = preset in ("urc", "urc_mission")
+    worlds = {
+        "arena": "storm_arena.sdf",
+        "urc": "urc_mdrs.sdf",
+        "urc_mission": "urc_mission.sdf",
+    }
     world = LC("world").perform(context) or os.path.join(
-        gz, "worlds", "urc_mdrs.sdf" if preset == "urc" else "storm_arena.sdf"
+        gz, "worlds", worlds[preset]
     )
     params = LC("params_file").perform(context) or os.path.join(
-        nav, "config", "nav2_urc.yaml" if preset == "urc" else "nav2.yaml"
+        nav, "config", "nav2_urc.yaml" if outdoor else "nav2.yaml"
     )
-    z = LC("spawn_z").perform(context) or ("0.15" if preset == "urc" else "0.03")
+    z = LC("spawn_z").perform(context) or ("0.15" if outdoor else "0.03")
 
     def include(package, file, arguments):
         return IncludeLaunchDescription(
@@ -39,7 +46,8 @@ def setup(context):
         include(
             "storm_gazebo",
             "simulation.launch.py",
-            {"gui": LC("gui"), "world": world, "spawn_z": z, "truth_pose": LC("truth_pose")},
+            {"gui": LC("gui"), "world": world, "spawn_z": z, "truth_pose": LC("truth_pose"),
+             "headless_rendering": LC("headless_rendering")},
         )
     ]
     if truth_pose:
@@ -80,9 +88,10 @@ def generate_launch_description():
     return LaunchDescription(
         [
             DeclareLaunchArgument(
-                "environment", default_value="arena", choices=["arena", "urc"]
+                "environment", default_value="arena", choices=["arena", "urc", "urc_mission"]
             ),
             DeclareLaunchArgument("gui", default_value="true"),
+            DeclareLaunchArgument("headless_rendering", default_value="true", choices=["true", "false"]),
             DeclareLaunchArgument("rviz", default_value="true"),
             DeclareLaunchArgument("navigation", default_value="true"),
             DeclareLaunchArgument("truth_pose", default_value="false", choices=["true", "false"]),

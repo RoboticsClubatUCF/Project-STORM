@@ -1,0 +1,47 @@
+{
+  "site": "Mars Desert Research Station, University Rover Challenge venue",
+  "source": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
+  "request_url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage?bbox=516889.0878225713%2C4249654.478845683%2C519449.0878225713%2C4252214.478845683&bboxSR=32612&imageSR=32612&size=321%2C321&format=tiff&pixelType=F32&interpolation=RSP_BilinearInterpolation&renderingRule=%7B%22rasterFunction%22%3A+%22None%22%7D&f=json",
+  "download_sha256": "411a8a9fd22a4a7349f6684b479698e96e89783d1a65cc5112ca27c2b012bd0e",
+  "fetched_utc": "2026-11-03T00:24:37.205003+00:00",
+  "station_latitude": 38.40645833333333,
+  "station_longitude": -110.79190277777778,
+  "projected_crs": "EPSG:32612",
+  "origin_utm_easting": 518169.0878225713,
+  "origin_utm_northing": 4250934.478845683,
+  "origin_source_elevation_m": 1372.9949951171875,
+  "extent": {
+    "xmin": 516889.0878225713,
+    "ymin": 4249654.478845683,
+    "xmax": 519449.0878225713,
+    "ymax": 4252214.478845683,
+    "spatialReference": {
+      "wkid": 32612,
+      "latestWkid": 32612
+    }
+  },
+  "requested_span_m": 2560.0,
+  "mesh_span_m": [
+    2552.024922118406,
+    2552.024922117591
+  ],
+  "grid_samples": 321,
+  "resampled_grid_spacing_m": [
+    7.975077881619938,
+    7.975077881619938
+  ],
+  "elevation_min_m": 1357.7633056640625,
+  "elevation_max_m": 1434.3460693359375,
+  "vertex_count": 103041,
+  "triangle_count": 204800,
+  "axes": "x=UTM grid east, y=UTM grid north, z=source elevation minus center elevation",
+  "limits": [
+    "Bare-earth DEM; no buildings, individual rocks, soil traction, or official mission layout.",
+    "Grid is resampled; grid spacing is not a claim of native source resolution.",
+    "Vertical scale is 1:1; UTM grid north differs slightly from true north.",
+    "Source elevation datum is preserved as provided by the service, not ellipsoidal GNSS height."
+  ],
+  "attribution": "USGS National Map 3D Elevation Program (3DEP). Public domain.",
+  "coordinate_source": "https://mdrs2013.marssociety.org/home/crew-162/0126-evareport",
+  "urc_resources": "https://urc.marssociety.org/home/resources"
+}

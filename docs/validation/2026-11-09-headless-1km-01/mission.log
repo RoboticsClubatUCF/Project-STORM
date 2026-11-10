@@ -1,0 +1,23 @@
+Waypoint near: executing 4 legs
+Leg 1/4: (7.98, 0.00)
+Leg 2/4: (15.95, 0.00)
+Leg 3/4: (23.93, 0.00)
+Leg 4/4: (23.83, 0.00)
+Waypoint near reached: map error 0.041 m, GNSS error 0.04669323624547309
+Waypoint middle: executing 18 legs
+Leg 1/18: (23.93, 0.00)
+Leg 2/18: (31.90, 0.00)
+Leg 3/18: (39.88, 0.00)
+Leg 4/18: (47.85, 0.00)
+Leg 5/18: (55.83, 0.00)
+Leg 6/18: (63.80, 0.00)
+Leg 7/18: (71.78, 0.00)
+Leg 8/18: (79.75, 0.00)
+Leg 9/18: (87.73, 0.00)
+Leg 10/18: (95.70, 0.00)
+Leg 11/18: (103.68, 0.00)
+Leg 12/18: (111.65, 0.00)
+Leg 13/18: (119.63, 0.00)
+Leg 14/18: (127.60, 0.00)
+Mission interrupted
+[ros2run]: Process exited with failure 130

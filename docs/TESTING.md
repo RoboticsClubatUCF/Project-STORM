@@ -92,6 +92,22 @@ outcomes are recorded in [validation results](VALIDATION.md).
 
 ## Sensor visual test
 
+For terrain routing with local collision checks, see
+[local navigation](LOCAL_NAVIGATION.md). The additional
+`devscripts/test_local_obstacles.py` spawns and removes a physical test box
+through the console's scene partition, and verifies occupied costmap cells
+and zero monitored output while a forward request is held.
+
+The [mission console](DASHBOARD.md) adds selectable tests that open Gazebo
+and RViz visibly. With its backend running, use
+`python3 devscripts/test_dashboard.py --test all` to exercise sensor readiness,
+teleop lease expiry, and the two-stop GNSS mission through the public API.
+
+For an ordered GNSS outbound/return trial, see
+[GNSS waypoint missions](GNSS_WAYPOINTS.md). That guide includes the installed
+smoke itinerary, execution command, and report fields. Package tests run with
+`colcon test --packages-select storm_mission`.
+
 Launch `ros2 launch storm_bringup simulation.launch.py environment:=urc truth_pose:=true`
 to open Gazebo and RViz with the simulator's pose as the reference. Check the
 rover, sensor frames, planar scan, VLP-16 cloud, and RGB and depth panes.
@@ -99,3 +115,8 @@ The global plan appears after a Nav2 goal is accepted. Some depth pixels remain
 dark when the camera gets no return. Use the default pose mode for tests
 that measure wheel and SLAM drift. See the [sensor guide](SENSORS.md) for
 topic checks and physical lidar bringup.
+
+For a server-only accelerated run of all three GNSS stops out to the 1 km goal,
+see [headless long-distance validation](HEADLESS_VALIDATION.md). That runner
+records achieved simulation speed and ordered arrivals, keeps the normal physics
+step and safety chain, and cleans up its isolated scene after completion.

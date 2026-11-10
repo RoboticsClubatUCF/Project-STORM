@@ -2,15 +2,16 @@
 
 import os
 import shlex
+
 import xacro
 from ament_index_python.packages import get_package_share_directory as share
 from launch import LaunchDescription
 from launch.actions import (
+    AppendEnvironmentVariable,
     DeclareLaunchArgument,
     IncludeLaunchDescription,
     OpaqueFunction,
     RegisterEventHandler,
-    AppendEnvironmentVariable,
 )
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -29,7 +30,7 @@ def setup(context):
         + (
             ""
             if LC("gui").perform(context).lower() == "true"
-            else "-s --headless-rendering "
+            else "-s " + ("--headless-rendering " if LC("headless_rendering").perform(context).lower() == "true" else "")
         )
         + shlex.quote(world)
     )
@@ -75,6 +76,10 @@ def setup(context):
         return handler
 
     return [
+        Node(package="storm_perception", executable="sensor_limits", name="sensor_limits",
+             parameters=[{"use_sim_time": True}], output="screen"),
+        Node(package="storm_perception", executable="vlp_scan", name="vlp_scan",
+             parameters=[{"use_sim_time": True}], output="screen"),
         AppendEnvironmentVariable("GZ_SIM_RESOURCE_PATH", os.path.dirname(pkg)),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
@@ -99,6 +104,13 @@ def setup(context):
             ],
             output="screen",
         ),
+        Node(
+            package="ros_gz_bridge", executable="parameter_bridge", name="storm_ground_truth_bridge",
+            parameters=[{"use_sim_time": True}],
+            arguments=["/storm_truth/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry"],
+            remappings=[("/storm_truth/odom", "/simulation/ground_truth/odom")],
+            output="screen",
+        ),
         *([Node(
             package="ros_gz_bridge", executable="parameter_bridge", name="storm_truth_bridge",
             arguments=[
@@ -118,6 +130,7 @@ def generate_launch_description():
     return LaunchDescription(
         [
             DeclareLaunchArgument("gui", default_value="true"),
+            DeclareLaunchArgument("headless_rendering", default_value="true", choices=["true", "false"]),
             DeclareLaunchArgument(
                 "world",
                 default_value=os.path.join(

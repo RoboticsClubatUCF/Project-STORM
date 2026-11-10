@@ -6,8 +6,13 @@
 | [Dependencies and setup](docs/DEPENDENCIES.md) | Prepare a Jazzy workspace and choose a hardware backend |
 | [Adding components](docs/EXTENDING.md) | Add a ROS package, sensor, controller, or test world |
 | [Running tests](docs/TESTING.md) | Run package tests and reproduce simulation checks |
+| [Headless kilometre validation](docs/HEADLESS_VALIDATION.md) | Run accelerated server-only GNSS navigation and save evidence |
 | [Physical sensor bringup](docs/SENSORS.md) | Bench-test the VLP-16 or Hokuyo and check Jetson compatibility |
 | [MDRS terrain](docs/URC_TERRAIN.md) | Inspect the terrain source, coordinates, and limitations |
+| [URC mission practice](docs/URC_MISSION.md) | Run the larger MDRS course and stage distance tests |
+| [GNSS waypoint missions](docs/GNSS_WAYPOINTS.md) | Plan ordered geographic targets and run simulated multi-stop missions |
+| [Mission console and agent API](docs/DASHBOARD.md) | Click map waypoints, track Gazebo truth, teleoperate, and run visible tests |
+| [Long routes and nearby obstacles](docs/LOCAL_NAVIGATION.md) | Separate terrain routing, local object costmaps, and final velocity checking |
 | [Validation results](docs/VALIDATION.md) | See what has already been exercised |
 
 A local Jazzy development version of RoboticsClubatUCF/Project-STORM. The rover
@@ -30,6 +35,9 @@ the Windows checkout is a source/review copy. The original repository is preserv
 | `storm_navigation` | Nav2, lifecycle management, SLAM, AMCL, maps, STORM RViz view |
 | `storm_gazebo` | Gazebo plugins, bridge, arena, optional real MDRS terrain |
 | `storm_bringup` | Application launch files combining the above |
+| `storm_mission` | Terrain routes, ordered GNSS targets, runtime fix checks, and mission reports |
+| `storm_dashboard` | Local web map, agent command API, Gazebo/RViz supervision, leased teleop and test automation |
+| `storm_perception` | Local ground-plane fitting and terrain-relative object observations from the VLP-16 |
 
 ## Install and build
 
@@ -53,6 +61,11 @@ and installs its library into the ROS overlay; no global library installation is
 needed. Run `colcon test --packages-select storm_hardware` after enabling it.
 
 ## Gazebo + Nav2
+
+For the browser map and visible test controls, run
+`bash devscripts/run_dashboard.sh` after building and open
+`http://localhost:8765`. The [console guide](docs/DASHBOARD.md) covers agent
+commands, teleop, and simulator ownership.
 
 ```bash
 ros2 launch storm_bringup simulation.launch.py

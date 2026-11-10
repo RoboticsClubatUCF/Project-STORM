@@ -87,7 +87,7 @@ Both integrated lidar and navigation are opt-in.
 | --- | --- |
 | Advanced Navigation SPATIAL | Confirm serial or Ethernet, ANPP settings, mounting, and timing. The vendor driver documents Humble. Verify Jazzy support and standard IMU/GNSS messages before feeding a localization filter. |
 | Generic RGB and Logitech 1080p | Identify each USB video device and supported modes before adding camera profiles and calibration. |
-| ZED RGB-D | Confirm the camera model and whether the repeated inventory entry denotes a second camera. Match the ZED SDK and ROS wrapper to the Jetson image. |
+| Original ZED | Model confirmed by the rover owner. Whether the repeated inventory entry denotes a second camera remains unconfirmed. Match the ZED SDK and ROS wrapper to the Jetson image before physical bringup. |
 | ArduCam 5 MP RPi 3 | Confirm sensor module, connector, carrier board, and supported Jetson driver before wiring. |
 | NEO v1.1 encoders | Already represented by SPARK CAN position and velocity feedback. Verify signs and scale against the wheels on the bench. |
 
@@ -101,14 +101,15 @@ The mounts and sensor models are representative and use simulation time.
 
 | ROS topic | Simulation model |
 | --- | --- |
-| `/scan` | Existing planar lidar used by Nav2 and SLAM, also suitable for testing planar Hokuyo consumers |
+| `/scan` | 720-bin projection of the VLP-16's nearest horizontal rings, not a separate simulated sensor |
 | `/velodyne_points` | VLP-16-style 16-ring point cloud at 10 Hz |
 | `/imu/data`, `/gps/fix` | SPATIAL-style IMU and GNSS outputs at 50 Hz and 5 Hz |
-| `/camera/image_raw`, `/camera/depth/image_raw`, `/camera/camera_info` | Shared 640×360 RGB-D proxy at 10 Hz for color and depth consumers |
+| `/camera/image_raw`, `/camera/depth/image_raw`, `/camera/camera_info` | Original-ZED-oriented 672×376 RGB-D proxy at 15 Hz and 90 degree horizontal field of view |
 | `/joint_states`, `/odom` | Wheel feedback from Gazebo ros2_control |
 
-The cloud and planar scan are generated separately. The camera proxy supports
-testing image pipelines without modeling each camera's optics, ZED stereo
+The cloud and derived scan share one VLP-16 source. The scan uses actual samples
+within 1.25 degrees of horizontal; it does not add an artificial horizontal beam.
+The camera proxy supports testing image pipelines without modeling ZED stereo
 processing, or CSI interface. GNSS uses a synthetic origin in the arena and
 an approximate MDRS origin outdoors. The IMU and GNSS streams are available
 to localization experiments. Current Nav2 bringup still uses wheel odometry
@@ -123,8 +124,44 @@ This is a simulation reference mode. Physical localization still needs tuning
 and validation.
 
 The simulated RGB-D camera points slightly downward to capture nearby
-ground. The RViz depth pane uses a fixed 0.2–20 m display scale. Pixels with
+ground. The RViz depth pane uses a fixed 0.5–20 m display scale. Pixels with
 no return can remain dark.
+
+### Range limits and interpretation
+
+The executable profiles are recorded in
+`storm_gazebo/config/sensor_limits.yaml`. The VLP-16 has 16 channels over a
+30 degree vertical field and a 100 m maximum range. The 1 m simulated near blind
+zone is conservative. The simulation samples fewer horizontal returns than the
+physical device and does not qualify reflectivity-dependent detection distance.
+
+The original ZED proxy uses a conservative 0.5–20 m depth operating window.
+Some legacy datasheet revisions advertise up to 25 m; 20 m is this project's
+software cap, not a universal hardware maximum. Depth is optical-axis distance.
+Stereo confidence, lighting, texture, and the ZED SDK are not simulated. RGB
+rendering extends to 150 m for scene visibility, which does not extend depth
+measurement range. See the manufacturer references in the profile YAML.
+
+`storm_perception/sensor_limits` validates `/simulation/vlp16/points` and
+`/simulation/camera/depth_unvalidated` before publishing the canonical sensor
+topics. Out-of-range values become invalid samples, rather than fabricated
+returns at the boundary. Consumers should use `/velodyne_points`, `/scan`, and
+`/camera/depth/image_raw`; the `/simulation/` inputs are diagnostic raw data.
+Local obstacle processing crops lidar points to a 10 m horizontal radius. A
+terrain prior visible beyond that radius is not live sensing. GNSS and IMU are
+not distance-ranging sensors; their errors and dynamic limits need separate
+physical qualification.
+
+To audit observed ranges in a running scene with the same ROS domain:
+
+```bash
+python3 devscripts/test_sensor_ranges.py --seconds 8 --output /tmp/storm-sensor-ranges.json
+colcon test --packages-select storm_perception storm_gazebo
+```
+
+The audit checks observed bounds and the sole `/scan` publisher. It is not a
+complete boundary-target, reflectivity, or occlusion qualification. See the
+[kilometre trial](validation/2026-11-09-headless-1km.md) for live audit results.
 
 ```bash
 ros2 launch storm_bringup simulation.launch.py environment:=urc \

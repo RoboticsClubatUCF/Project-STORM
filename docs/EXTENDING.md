@@ -29,6 +29,11 @@ in YAML. Test the package alone before including it in application bringup.
 
 ## Integration checklist by component
 
+To add a geographic practice itinerary, create a version-1 WGS84 JSON file
+under `storm_mission/missions` and rebuild that package. Keep mission execution
+above Nav2's action interface. See [GNSS waypoint missions](GNSS_WAYPOINTS.md)
+for schema, projection assumptions, and the planned localization interface.
+
 | Component | Changes | Verify |
 | --- | --- | --- |
 | Sensor | Add the measured mount and named frame to `storm_description`. Put simulator plugins and bridge rules in `storm_gazebo`. Launch the physical driver separately or include it in robot bringup. | Topic type, frame ID, timestamp, rate, and TF to `base_link`. |

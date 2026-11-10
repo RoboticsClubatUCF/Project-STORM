@@ -15,7 +15,9 @@ simulator. WSLg is needed for graphical windows under WSL.
 | velodyne_driver, velodyne_pointcloud, velodyne_laserscan, urg_node | Physical lidar drivers and VLP-16 scan conversion | Sensor package |
 | sparkcan, SocketCAN, SPARK MAX controllers | Physical CAN backend | Optional hardware build and bench use |
 | ament_cmake_pytest, pytest, PyYAML, ament_cmake_gtest | Package tests | Test builds |
-| NumPy and Pillow | Regenerating MDRS assets | Terrain generation only |
+| NumPy, Pillow, pyproj | Terrain planning, geographic conversion, dashboard relief/depth processing | Mission and dashboard packages, terrain generation |
+| ament_cmake_python, Python standard HTTP/subprocess libraries | Installed Python modules and local command API | Mission and dashboard packages |
+| lifecycle_msgs, controller_manager_msgs | Read Nav2 lifecycle and drive-controller readiness | Dashboard |
 
 Each package's `package.xml` declares its ROS dependencies. Install ROS 2 Jazzy
 and the colcon and rosdep tools first. Run `sudo rosdep init` once on a fresh

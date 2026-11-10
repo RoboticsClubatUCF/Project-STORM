@@ -1,12 +1,14 @@
 """Nav2 only: consume an existing robot, /odom, /scan, and TF."""
 
 import os
+
+import yaml
 from ament_index_python.packages import get_package_share_directory as share
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
-    OpaqueFunction,
     IncludeLaunchDescription,
+    OpaqueFunction,
 )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration as LC
@@ -21,6 +23,8 @@ def setup(context):
     params_path = LC("params_file").perform(context)
     if not os.path.isfile(params_path):
         raise RuntimeError("Nav2 params_file does not exist: " + params_path)
+    with open(params_path) as stream:
+        collision_guard = "collision_monitor" in yaml.safe_load(stream)
     params = ParameterFile(
         RewrittenYaml(
             source_file=params_path,
@@ -92,12 +96,18 @@ def setup(context):
         ("nav2_waypoint_follower", "waypoint_follower"),
     ]
     actions = list(localization)
+    if collision_guard:
+        specs.append(("nav2_collision_monitor", "collision_monitor"))
+        actions.append(Node(
+            package="storm_perception", executable="ground_filter", name="ground_filter",
+            parameters=[{"use_sim_time": use_time}], output="screen"))
     for package, name in specs:
         remaps = []
         if name in ("controller_server", "behavior_server"):
             remaps = [("cmd_vel", "cmd_vel_nav")]
         if name == "velocity_smoother":
-            remaps = [("cmd_vel", "cmd_vel_nav"), ("cmd_vel_smoothed", "cmd_vel")]
+            remaps = [("cmd_vel", "cmd_vel_nav"), ("cmd_vel_smoothed",
+                       "cmd_vel_checked" if collision_guard else "cmd_vel")]
         actions.append(
             Node(
                 package=package,

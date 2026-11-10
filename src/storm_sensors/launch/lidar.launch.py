@@ -42,7 +42,8 @@ def setup(context):
             ),
             Node(
                 package="velodyne_pointcloud", executable="velodyne_transform_node",
-                parameters=[{"model": "VLP16", "calibration": calibration}],
+                parameters=[{"model": "VLP16", "calibration": calibration,
+                             "min_range": 1.0, "max_range": 100.0}],
                 output="screen",
             ),
             Node(

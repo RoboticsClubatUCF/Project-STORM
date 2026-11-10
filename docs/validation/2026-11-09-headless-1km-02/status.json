@@ -1,0 +1,41 @@
+{
+  "status": "cancelled",
+  "mission_id": "headless-d403200c6ac7",
+  "ros_domain": 78,
+  "gz_partition": "headless-d403200c6ac7",
+  "requested_real_time_factor": 4.0,
+  "render_backend": "display",
+  "physics_step_s": 0.001,
+  "source_world_sha256": "792b8a1fcb279fcd81c0b060c0caca780b1b0886fbb8c7d984fe068d4b37d901",
+  "mission_sha256": "bb576bdbaa84f562820e804e900b7899a4f45feb0785e845893ca68c52c1d643",
+  "scope": "Truth-localized Nav2 simulation; no payload, RF, or physical GNSS qualification",
+  "message_counts": {
+    "clock": 248042,
+    "gnss": 1274,
+    "truth": 12713,
+    "lidar": 2541,
+    "scan": 2545,
+    "objects": 639
+  },
+  "collision_actions": {
+    "2:SlowZone": 4,
+    "0:": 4
+  },
+  "states": {
+    "planner_server": 3,
+    "collision_monitor": 3,
+    "controller_server": 3,
+    "bt_navigator": 3,
+    "drive": true
+  },
+  "wall_elapsed_s": 136.99549976098933,
+  "mission_wall_s": 125.65301468399412,
+  "mission_simulation_s": 247.457,
+  "achieved_real_time_factor": 1.969367791312702,
+  "truth_xy": [
+    60.655070140838305,
+    -0.029750286938559658
+  ],
+  "distance_from_origin_m": 60.65507743684437,
+  "reason": "Cancelled"
+}

@@ -1,0 +1,2 @@
+# Preserve captured validation logs exactly, including ROS output whitespace.
+docs/validation/**/*.log -text -whitespace

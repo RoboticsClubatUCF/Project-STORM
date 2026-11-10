@@ -138,6 +138,25 @@ Visualization Manager:
     Topic:
       Reliability Policy: Best Effort
       Value: /velodyne_points
+  - Class: rviz_default_plugins/PointCloud2
+    Name: Detected objects
+    Enabled: true
+    Value: true
+    Style: Points
+    Size (Pixels): 4
+    Color Transformer: FlatColor
+    Color: 255; 90; 50
+    Topic:
+      Reliability Policy: Best Effort
+      Value: /perception/obstacles
+  - Class: rviz_default_plugins/Polygon
+    Name: Collision stop zone
+    Enabled: true
+    Value: true
+    Color: 255; 90; 50
+    Topic:
+      Reliability Policy: Reliable
+      Value: /collision_stop_zone
   - Class: rviz_default_plugins/Image
     Name: RGB camera
     Enabled: true
@@ -150,7 +169,7 @@ Visualization Manager:
     Enabled: true
     Value: true
     Normalize Range: false
-    Min Value: 0.2
+    Min Value: 0.5
     Max Value: 20
     Topic:
       Reliability Policy: Best Effort
@@ -178,6 +197,16 @@ Visualization Manager:
     Value: true
     Show Names: true
     Marker Scale: 0.25
+  - Class: rviz_default_plugins/Path
+    Name: Mission terrain route
+    Enabled: true
+    Value: true
+    Color: 255; 170; 0
+    Topic:
+      Depth: 1
+      Durability Policy: Transient Local
+      Reliability Policy: Reliable
+      Value: /mission/route
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48

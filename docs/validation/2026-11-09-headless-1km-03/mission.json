@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "status": "failed",
+  "waypoints": [
+    {
+      "id": "near",
+      "goal_gnss": [
+        38.40645833333333,
+        -110.79163
+      ],
+      "goal_xy": [
+        23.831024780803876,
+        3.524181511949109e-05
+      ],
+      "status": "succeeded",
+      "map_error_m": 0.03751991136151602,
+      "gnss_error_m": 0.047177680044400254,
+      "leg_count": 4
+    },
+    {
+      "id": "middle",
+      "goal_gnss": [
+        38.40645833333333,
+        -110.79017
+      ],
+      "goal_xy": [
+        151.38282337775922,
+        0.0014220785452039308
+      ],
+      "status": "succeeded",
+      "map_error_m": 0.20847905370737646,
+      "gnss_error_m": 0.23842007389905703,
+      "leg_count": 18
+    },
+    {
+      "id": "far",
+      "goal_gnss": [
+        38.40645833333333,
+        -110.78045
+      ],
+      "goal_xy": [
+        1000.563284263565,
+        0.06212400755845238
+      ],
+      "status": "failed"
+    }
+  ],
+  "mission_id": "headless-89817f5d87da",
+  "datum": {
+    "station_latitude": 38.40645833333333,
+    "station_longitude": -110.79190277777778,
+    "origin_source_elevation_m": 1372.9949951171875
+  },
+  "arrival_radius_m": 1.0,
+  "targets": [
+    {
+      "id": "near",
+      "goal_gnss": [
+        38.40645833333333,
+        -110.79163
+      ],
+      "goal_xy": [
+        23.831024780803876,
+        3.524181511949109e-05
+      ]
+    },
+    {
+      "id": "middle",
+      "goal_gnss": [
+        38.40645833333333,
+        -110.79017
+      ],
+      "goal_xy": [
+        151.38282337775922,
+        0.0014220785452039308
+      ]
+    },
+    {
+      "id": "far",
+      "goal_gnss": [
+        38.40645833333333,
+        -110.78045
+      ],
+      "goal_xy": [
+        1000.563284263565,
+        0.06212400755845238
+      ]
+    }
+  ],
+  "active_goal_terminated": true,
+  "reason": "Nav2 leg timed out"
+}

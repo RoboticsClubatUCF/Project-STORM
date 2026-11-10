@@ -9,6 +9,7 @@ import math
 from pathlib import Path
 from urllib.parse import urlencode
 from urllib.request import urlopen
+
 import numpy as np
 from PIL import Image
 
@@ -60,23 +61,27 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--refresh", action="store_true")
+    parser.add_argument("--span", type=float, default=1024.0, help="Raster width in metres")
+    parser.add_argument("--samples", type=int, default=257, help="Odd grid size per axis")
     args = parser.parse_args()
+    if not math.isfinite(args.span) or args.span <= 0 or not 3 <= args.samples <= 513 or args.samples % 2 != 1:
+        parser.error("Use a positive span and an odd sample count between 3 and 513")
     output = args.output
     output.mkdir(parents=True, exist_ok=True)
     east, north = utm12(LAT, LON)
-    span, samples = 1024.0, 257
+    span, samples = args.span, args.samples
     bbox = [east - span / 2, north - span / 2, east + span / 2, north + span / 2]
-    query = dict(
-        bbox=",".join(map(str, bbox)),
-        bboxSR=32612,
-        imageSR=32612,
-        size=f"{samples},{samples}",
-        format="tiff",
-        pixelType="F32",
-        interpolation="RSP_BilinearInterpolation",
-        renderingRule=json.dumps({"rasterFunction": "None"}),
-        f="json",
-    )
+    query = {
+        "bbox": ",".join(map(str, bbox)),
+        "bboxSR": 32612,
+        "imageSR": 32612,
+        "size": f"{samples},{samples}",
+        "format": "tiff",
+        "pixelType": "F32",
+        "interpolation": "RSP_BilinearInterpolation",
+        "renderingRule": json.dumps({"rasterFunction": "None"}),
+        "f": "json",
+    }
     request_url = SERVICE + "/exportImage?" + urlencode(query)
     source = output / "mdrs_dem.tif"
     response_path = output / "usgs_export.json"
@@ -113,6 +118,9 @@ def main():
             "Elevation range implausibly flat; service may have returned rendered values"
         )
     extent = export["extent"]
+    actual_bounds = [extent[key] for key in ("xmin", "ymin", "xmax", "ymax")]
+    if not np.allclose(actual_bounds, bbox, rtol=0, atol=0.1):
+        raise RuntimeError("Cached extent differs from requested bounds. Use another output directory or --refresh.")
     dx = (extent["xmax"] - extent["xmin"]) / samples
     dy = (extent["ymax"] - extent["ymin"]) / samples
     xs = extent["xmin"] + (np.arange(samples) + 0.5) * dx - east
@@ -150,40 +158,40 @@ def main():
     Image.fromarray(
         np.round((z - z.min()) / (z.max() - z.min()) * 65535).astype(np.uint16)
     ).save(output / "mdrs_height_preview.png")
-    metadata = dict(
-        site="Mars Desert Research Station, University Rover Challenge venue",
-        source=SERVICE,
-        request_url=request_url,
-        download_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
-        fetched_utc=__import__("datetime")
+    metadata = {
+        "site": "Mars Desert Research Station, University Rover Challenge venue",
+        "source": SERVICE,
+        "request_url": request_url,
+        "download_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+        "fetched_utc": __import__("datetime")
         .datetime.now(__import__("datetime").timezone.utc)
         .isoformat(),
-        station_latitude=LAT,
-        station_longitude=LON,
-        projected_crs="EPSG:32612",
-        origin_utm_easting=east,
-        origin_utm_northing=north,
-        origin_source_elevation_m=reference,
-        extent=extent,
-        requested_span_m=span,
-        mesh_span_m=[float(xs[-1] - xs[0]), float(ys[0] - ys[-1])],
-        grid_samples=samples,
-        resampled_grid_spacing_m=[dx, dy],
-        elevation_min_m=float(z.min()),
-        elevation_max_m=float(z.max()),
-        vertex_count=len(vertices),
-        triangle_count=len(triangles),
-        axes="x=UTM grid east, y=UTM grid north, z=source elevation minus center elevation",
-        limits=[
+        "station_latitude": LAT,
+        "station_longitude": LON,
+        "projected_crs": "EPSG:32612",
+        "origin_utm_easting": east,
+        "origin_utm_northing": north,
+        "origin_source_elevation_m": reference,
+        "extent": extent,
+        "requested_span_m": span,
+        "mesh_span_m": [float(xs[-1] - xs[0]), float(ys[0] - ys[-1])],
+        "grid_samples": samples,
+        "resampled_grid_spacing_m": [dx, dy],
+        "elevation_min_m": float(z.min()),
+        "elevation_max_m": float(z.max()),
+        "vertex_count": len(vertices),
+        "triangle_count": len(triangles),
+        "axes": "x=UTM grid east, y=UTM grid north, z=source elevation minus center elevation",
+        "limits": [
             "Bare-earth DEM; no buildings, individual rocks, soil traction, or official mission layout.",
             "Grid is resampled; grid spacing is not a claim of native source resolution.",
             "Vertical scale is 1:1; UTM grid north differs slightly from true north.",
             "Source elevation datum is preserved as provided by the service, not ellipsoidal GNSS height.",
         ],
-        attribution="USGS National Map 3D Elevation Program (3DEP). Public domain.",
-        coordinate_source="https://mdrs2013.marssociety.org/home/crew-162/0126-evareport",
-        urc_resources="https://urc.marssociety.org/home/resources",
-    )
+        "attribution": "USGS National Map 3D Elevation Program (3DEP). Public domain.",
+        "coordinate_source": "https://mdrs2013.marssociety.org/home/crew-162/0126-evareport",
+        "urc_resources": "https://urc.marssociety.org/home/resources",
+    }
     (output / "provenance.json").write_text(json.dumps(metadata, indent=2) + "\n")
     print(
         json.dumps(
