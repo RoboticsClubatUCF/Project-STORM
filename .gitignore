@@ -3,6 +3,7 @@ install/
 log/
 .deps/
 .cache/
+.vscode
 __pycache__/
 .pytest_cache/
 *.pyc
