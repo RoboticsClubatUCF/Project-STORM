@@ -1,0 +1,53 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/cpp
+{
+  "name": "ROS Environment WSL-NVIDIA",
+  "build": {
+    "dockerfile": "../Dockerfile"
+  },
+  // 1. Mount the Wayland Socket and GPU rendering devices consistency=cached
+  "mounts": [],
+  "hostRequirements": {
+    "gpu": true
+  },
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+  "runArgs": [
+    "--ipc=host",
+    "--network=host",
+    "--device=/dev/dxg",
+    "--gpus",
+    "all"
+  ],
+  "containerEnv": {
+		"DISPLAY": "${localEnv:DISPLAY}"
+	},
+  "remoteEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}"
+  },
+  "forwardPorts": [
+    8765
+  ],
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "chmod +x ./devscripts/download_ros_pkgs.sh && ./devscripts/download_ros_pkgs.sh",
+  // Configure tool-specific properties.
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cmake-tools",
+        "Ranch-Hand-Robotics.rde-ros-2",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "ms-python.vscode-python-envs",
+        "ms-vscode.cpptools",
+        "ms-vscode.cpp-devtools"
+      ]
+    }
+  }
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
+}
