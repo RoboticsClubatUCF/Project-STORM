@@ -18,20 +18,30 @@ struct Wheel {
 class SparkCanHardware : public hardware_interface::SystemInterface {
 public:
   hardware_interface::CallbackReturn on_init(const hardware_interface::HardwareComponentInterfaceParams & params) override;
-  hardware_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State &) override;
-  hardware_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &) override;
-  hardware_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &) override;
-  hardware_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &) override;
-  hardware_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &) override;
-  hardware_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &) override;
-  hardware_interface::return_type read(const rclcpp::Time &, const rclcpp::Duration &) override;
-  hardware_interface::return_type write(const rclcpp::Time &, const rclcpp::Duration &) override;
+  hardware_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State &state) override;
+  hardware_interface::CallbackReturn on_activate(const rclcpp_lifecycle::State &state) override;
+  hardware_interface::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &state) override;
+  hardware_interface::CallbackReturn on_cleanup(const rclcpp_lifecycle::State &state) override;
+  hardware_interface::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &state) override;
+  hardware_interface::CallbackReturn on_error(const rclcpp_lifecycle::State &state) override;
+  hardware_interface::return_type read(const rclcpp::Time &state,
+                                       const rclcpp::Duration &duration) override;
+  hardware_interface::return_type write(const rclcpp::Time &state,
+                                        const rclcpp::Duration &duration) override;
+
 private:
   void stop() noexcept;
   std::vector<Wheel> wheels_;
   std::string can_interface_;
+  
   double ratio_{81.0};
-  float kp_{0.0001f}, ki_{0}, kd_{0}, kf_{0.000176f};
+  
+  static constexpr float kDefaultKp{0.0001F};
+  static constexpr float kDefaultKi{0.0F};
+  static constexpr float kDefaultKd{0.0F};
+  static constexpr float kDefaultKf{0.000176F};
+
+  float kp_{kDefaultKp}, ki_{kDefaultKi}, kd_{kDefaultKd}, kf_{kDefaultKf};
 };
 }  // namespace storm_hardware
 #endif
