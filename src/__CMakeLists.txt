@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.16)
+project(storm_workspace)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# set(STORM_CMAKE_SUBPROJECTS
+#   storm_bringup
+#   storm_control
+#   storm_dashboard
+#   storm_description
+#   storm_gazebo
+#   storm_hardware
+#   storm_mission
+#   storm_navigation
+#   storm_perception
+#   storm_sensors
+#   storm_sparkcan_vendor
+#   storm_teleop
+# )
+
+# foreach(subproject IN LISTS STORM_CMAKE_SUBPROJECTS)
+#   add_subdirectory("${subproject}")
+# endforeach()
