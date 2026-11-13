@@ -23,6 +23,7 @@
     "DISPLAY": "${localEnv:DISPLAY}"
   },
   "forwardPorts": [
+    8764,
     8765
   ],
   // Use 'postCreateCommand' to run commands after the container is created.

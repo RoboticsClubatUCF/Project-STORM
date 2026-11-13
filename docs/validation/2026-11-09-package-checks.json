@@ -1,0 +1,124 @@
+{
+  "checked_at_utc": "2026-11-10T01:04:35.297806+00:00",
+  "full_workspace_build": {
+    "status": "passed",
+    "packages": 12
+  },
+  "colcon_test_result": "Summary: 63 tests, 0 errors, 0 failures, 0 skipped",
+  "note": "Colcon counts include test harness records; do not interpret 63 as 63 independent unit test cases.",
+  "additional_checks": {
+    "targeted_ruff": "passed",
+    "dashboard_javascript_syntax": "passed",
+    "git_diff_check": "passed"
+  },
+  "suite_reports": [
+    {
+      "path": "build/storm_dashboard/test_results/storm_dashboard/dashboard_core.xunit.xml",
+      "suites": [
+        {
+          "name": "pytest",
+          "tests": "17",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0"
+        }
+      ]
+    },
+    {
+      "path": "build/storm_description/test_results/storm_description/description_contract.xunit.xml",
+      "suites": [
+        {
+          "name": "pytest",
+          "tests": "3",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0"
+        }
+      ]
+    },
+    {
+      "path": "build/storm_gazebo/test_results/storm_gazebo/sensor_limits.xunit.xml",
+      "suites": [
+        {
+          "name": "pytest",
+          "tests": "1",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0"
+        }
+      ]
+    },
+    {
+      "path": "build/storm_hardware/test_results/storm_hardware/test_hardware_init.gtest.xml",
+      "suites": [
+        {
+          "name": "HardwareInit",
+          "tests": "4",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0"
+        }
+      ]
+    },
+    {
+      "path": "build/storm_mission/test_results/storm_mission/mission_route.xunit.xml",
+      "suites": [
+        {
+          "name": "pytest",
+          "tests": "17",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0"
+        }
+      ]
+    },
+    {
+      "path": "build/storm_navigation/test_results/storm_navigation/navigation_contract.xunit.xml",
+      "suites": [
+        {
+          "name": "pytest",
+          "tests": "3",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0"
+        }
+      ]
+    },
+    {
+      "path": "build/storm_perception/test_results/storm_perception/range_gate.xunit.xml",
+      "suites": [
+        {
+          "name": "pytest",
+          "tests": "2",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0"
+        }
+      ]
+    },
+    {
+      "path": "build/storm_perception/test_results/storm_perception/segmentation.xunit.xml",
+      "suites": [
+        {
+          "name": "pytest",
+          "tests": "5",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0"
+        }
+      ]
+    },
+    {
+      "path": "build/storm_perception/test_results/storm_perception/sensor_projection.xunit.xml",
+      "suites": [
+        {
+          "name": "pytest",
+          "tests": "2",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0"
+        }
+      ]
+    }
+  ]
+}

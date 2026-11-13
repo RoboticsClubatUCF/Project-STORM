@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>STORM · Mission console</title><link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="masthead">
+    <div class="identity"><div class="mark">S<span>↗</span></div><div><h1>STORM<span>MISSION CONSOLE</span></h1><p>Robotics Club at UCF <span class="dot">/</span> Desert field operations</p></div></div>
+    <div class="session"><span class="status-dot" id="connection-dot"></span><span id="connection">Connecting</span><span class="pill">SIMULATION</span></div>
+    <button id="stop" class="stop">■ Stop motion</button>
+  </header>
+  <div class="subhead"><span><b>MDRS</b> <span class="muted">/</span> Hanksville, Utah</span><span>WGS84 <span class="muted">·</span> 2.56 × 2.56 km site <span class="muted">·</span> USGS terrain</span><span id="clock">SIM TIME —</span></div>
+  <main>
+    <aside class="left-column">
+      <section class="panel plan-panel">
+        <div class="section-heading"><div><p class="eyebrow">01 / MISSION</p><h2>Waypoint plan</h2></div><span class="count" id="count">00</span></div>
+        <p class="help">Click the map to add a stop. Drag to pan and scroll to zoom.</p>
+        <div class="plan-toolbar"><button id="add-mode" class="small active" aria-pressed="true">＋ Add points</button><button id="clear-plan" class="small quiet">Clear</button></div>
+        <div class="file-toolbar"><button id="import-plan" class="small quiet">Import JSON ↙</button><button id="export-plan" class="small quiet">Export ↗</button><input id="import-file" type="file" accept=".json,application/json" hidden></div>
+        <ol id="waypoints" class="waypoints"><li class="empty">Your next route starts here.<span>Add a waypoint on the site map.</span></li></ol>
+        <div class="route-stats"><div><span>PLANNED DISTANCE</span><strong id="distance">— <small>m</small></strong></div><div><span>LOCAL LEGS</span><strong id="legs">—</strong></div></div>
+        <button id="preview" class="secondary full">Preview terrain route</button>
+        <label class="check"><input id="allow-unknown" type="checkbox" checked> Terrain-guided travel beyond sensor range</label>
+        <button id="execute" class="primary full">Start waypoint mission <span>↗</span></button>
+        <div class="mission-status" id="mission-status">Plan offline or launch the simulator to drive.</div>
+        <button id="cancel-mission" class="small quiet full">Cancel mission</button>
+      </section>
+      <section class="panel datum-panel"><p class="eyebrow">SITE REFERENCE</p><h3>Martian terrain. Earth coordinates.</h3><p>The map shows measured elevation with 5 m contour bands. The rover icon follows Gazebo truth.</p><dl><dt>Latitude</dt><dd id="datum-lat">—</dd><dt>Longitude</dt><dd id="datum-lon">—</dd><dt>Elevation</dt><dd id="elevation">—</dd></dl><p class="footnote">Practice site · synthetic missions · ENU approximation over UTM terrain</p></section>
+    </aside>
+    <section class="map-column">
+      <div class="map-heading"><div><p class="eyebrow">02 / SITE OVERVIEW</p><h2>Mars Desert Research Station</h2></div><button id="fit" class="small">Fit site ⤢</button></div>
+      <div class="map-wrap" id="map-wrap"><canvas id="map" aria-label="Interactive 2D site map. Click to add waypoints." tabindex="0"></canvas><div class="map-badge"><span class="status-dot"></span> TERRAIN PRIOR · LIDAR ≤100 m</div><div class="north">N<span>↑</span></div><div class="map-tools"><button id="zoom-in" aria-label="Zoom in">＋</button><button id="zoom-out" aria-label="Zoom out">−</button><button id="follow" aria-label="Center on rover">◎</button></div><div class="map-caption" id="map-caption">Click to add a waypoint</div><div class="scale" id="scale">500 m</div></div>
+      <div class="map-footer"><div><i class="legend truth"></i> Gazebo truth <i class="legend estimate"></i> Nav estimate <i class="legend route"></i> Planned route</div><span id="cursor">E 0.0 / N 0.0 m</span></div>
+      <section class="telemetry-strip"><div><p class="eyebrow">TRUE POSITION</p><strong id="true-position">— / — <small>m</small></strong></div><div><p class="eyebrow">TRUTH / ESTIMATE</p><strong id="pose-error">— <small>m</small></strong></div><div><p class="eyebrow">GNSS</p><strong id="gnss-status">Awaiting fix</strong></div><div><p class="eyebrow">NAVIGATION</p><strong id="nav-status">Offline</strong></div></section>
+      <section class="panel activity"><div class="section-heading"><h3>Activity feed</h3><span class="eyebrow" id="activity-state">LOCAL SESSION</span></div><div id="events" aria-live="polite"></div><details><summary>Application logs & mission report</summary><pre id="logs">No process logs yet.</pre><pre id="report"></pre></details></section>
+    </section>
+    <aside class="right-column">
+      <section class="panel simulator-panel"><div class="section-heading"><div><p class="eyebrow">03 / SIMULATOR</p><h2>Test environment</h2></div><span class="tiny-status" id="sim-status">OFFLINE</span></div><p class="help">Launch the rover on the MDRS terrain. Gazebo and RViz open as visible windows.</p><button id="launch" class="primary full">Open Gazebo + RViz <span>↗</span></button><button id="close-sim" class="small quiet full">Close simulator</button><div id="sensor-chips" class="sensor-chips"></div></section>
+      <section class="panel"><div class="section-heading"><div><p class="eyebrow">04 / MANUAL DRIVE</p><h2>Teleoperation</h2></div><button id="teleop-toggle" class="small">Enable</button></div><p class="help">Hold WASD, arrow keys, or a direction button. Release to stop.</p><div class="dpad"><button data-drive="forward" class="up" aria-label="Drive forward">↑<small>W</small></button><button data-drive="left" class="left" aria-label="Turn left">←<small>A</small></button><button id="teleop-zero" class="center" aria-label="Stop teleoperation">■</button><button data-drive="right" class="right" aria-label="Turn right">→<small>D</small></button><button data-drive="back" class="down" aria-label="Drive backward">↓<small>S</small></button></div><div class="drive-readout"><span id="drive-speed">0.00 m/s</span><span id="drive-turn">0.00 rad/s</span></div><p class="footnote" id="teleop-note">Manual control is disabled. Input expires automatically after 350 ms.</p></section>
+      <section class="panel tests-panel"><div class="section-heading"><div><p class="eyebrow">05 / VALIDATION</p><h2>Automated tests</h2></div><span class="test-icon">✓</span></div><label class="field-label" for="test-select">SELECT A TEST</label><select id="test-select"><option value="sensors">Sensor & scene check</option><option value="waypoints">GNSS outbound + return</option><option value="deadman">Teleop deadman stop</option><option value="delivery">Delivery transit practice</option></select><p id="test-description" class="help"></p><p class="footnote">Each test opens a fresh, visible scene. Stop an existing simulator first. Motion tests permit unexplored terrain.</p><button id="run-test" class="secondary full">▶ Run selected test</button><div id="test-status" class="test-status">No test running</div><button id="cancel-test" class="small quiet full">Cancel test</button></section>
+    </aside>
+  </main>
+  <footer><span>STORM <b>/</b> NAVIGATION LAB</span><span>Local command API <a href="/api/schema" target="_blank" rel="noopener">/api/schema ↗</a></span><span>Truth pose mode · simulation use</span></footer>
+  <div id="toast" class="toast" role="alert" hidden></div>
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "stats": {
+    "lidar": {
+      "messages": 60,
+      "finite_samples": 435724,
+      "minimum_m": 1.3767181634902954,
+      "maximum_m": 96.54473114013672,
+      "violations": 0
+    },
+    "scan": {
+      "messages": 60,
+      "finite_samples": 41504,
+      "minimum_m": 2.9937539100646973,
+      "maximum_m": 96.45096588134766,
+      "violations": 0
+    },
+    "depth": {
+      "messages": 13,
+      "finite_samples": 2212234,
+      "minimum_m": 0.5000002384185791,
+      "maximum_m": 19.99998664855957,
+      "violations": 0
+    },
+    "local_objects": {
+      "messages": 30,
+      "finite_samples": 3543,
+      "minimum_m": 3.017101764678955,
+      "maximum_m": 9.999874114990234,
+      "violations": 0
+    }
+  },
+  "scan_sources": [
+    "vlp_scan"
+  ],
+  "scope": "Observed live bounds plus software gate tests; not a complete reflectivity/occlusion qualification"
+}

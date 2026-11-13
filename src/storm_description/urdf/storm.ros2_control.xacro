@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="controlled_wheel" params="name can_id inverted">
+    <joint name="${name}_wheel_joint">
+      <param name="can_id">${can_id}</param><param name="inverted">${inverted}</param>
+      <command_interface name="velocity"/>
+      <state_interface name="position"/><state_interface name="velocity"/>
+    </joint>
+  </xacro:macro>
+  <xacro:macro name="storm_control" params="backend can_interface">
+    <ros2_control name="StormSystem" type="system">
+      <hardware>
+        <xacro:if value="${backend == 'mock'}"><plugin>mock_components/GenericSystem</plugin></xacro:if>
+        <xacro:if value="${backend == 'gazebo'}"><plugin>gz_ros2_control/GazeboSimSystem</plugin></xacro:if>
+        <xacro:if value="${backend == 'can'}">
+          <plugin>storm_hardware/SparkCanHardware</plugin>
+          <param name="can_interface">${can_interface}</param><param name="gear_ratio">81.0</param>
+          <param name="pid_kp">0.0001</param><param name="pid_ki">0.0</param>
+          <param name="pid_kd">0.0</param><param name="pid_kf">0.000176</param>
+        </xacro:if>
+      </hardware>
+      <xacro:controlled_wheel name="back_right" can_id="1" inverted="false"/>
+      <xacro:controlled_wheel name="middle_right" can_id="2" inverted="false"/>
+      <xacro:controlled_wheel name="front_right" can_id="3" inverted="false"/>
+      <xacro:controlled_wheel name="front_left" can_id="4" inverted="true"/>
+      <xacro:controlled_wheel name="middle_left" can_id="5" inverted="true"/>
+      <xacro:controlled_wheel name="back_left" can_id="6" inverted="true"/>
+    </ros2_control>
+  </xacro:macro>
+</robot>

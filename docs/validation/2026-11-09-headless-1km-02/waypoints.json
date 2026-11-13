@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "frame": "WGS84",
+  "waypoints": [
+    {"id": "near", "latitude": 38.40645833333333, "longitude": -110.79163},
+    {"id": "middle", "latitude": 38.40645833333333, "longitude": -110.79017},
+    {"id": "far", "latitude": 38.40645833333333, "longitude": -110.78045}
+  ]
+}

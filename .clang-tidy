@@ -1,0 +1,10 @@
+# Enable your preferred checks
+Checks: 'clang-diagnostic-*,readability-*,bugprone-*'
+
+# CRITICAL: Prevent clang-tidy from treating system/third-party headers as errors
+HeaderFilterRegex: '^(src/|include/)'
+
+# Turn warnings into build-failing errors (optional)
+WarningsAsErrors: '*'
+
+Checks: '-readability-function-cognitive-complexity'

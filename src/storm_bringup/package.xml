@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>storm_bringup</name><version>0.2.0</version>
+  <description>STORM top-level simulation and physical robot application launch.</description>
+  <maintainer email="todo@todo.com">Project STORM maintainers</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>storm_description</exec_depend>
+  <exec_depend>storm_control</exec_depend>
+  <exec_depend>storm_hardware</exec_depend>
+  <exec_depend>storm_teleop</exec_depend>
+  <exec_depend>storm_navigation</exec_depend>
+  <exec_depend>storm_sensors</exec_depend>
+  <exec_depend>storm_gazebo</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>nav2_common</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>

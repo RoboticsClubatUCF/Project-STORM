@@ -6,7 +6,11 @@
     "dockerfile": "../Dockerfile"
   },
   // 1. Mount the Wayland Socket and GPU rendering devices consistency=cached
-  "mounts": [],
+  "mounts": [
+    "source=/mnt/wslg/.X11-unix,target=/tmp/.X11-unix,type=bind",
+    "source=/mnt/wslg,target=/mnt/wslg,type=bind",
+    "source=/usr/lib/wsl,target=/usr/lib/wsl,type=bind"
+  ],
   "hostRequirements": {
     "gpu": true
   },
@@ -28,6 +32,7 @@
     "DISPLAY": "${localEnv:DISPLAY}"
   },
   "forwardPorts": [
+    8764,
     8765
   ],
   // Use 'postCreateCommand' to run commands after the container is created.
@@ -44,7 +49,8 @@
         "ms-python.debugpy",
         "ms-python.vscode-python-envs",
         "ms-vscode.cpptools",
-        "ms-vscode.cpp-devtools"
+        "ms-vscode.cpp-devtools",
+        "CS128.cs128-clang-tidy"
       ]
     }
   }
