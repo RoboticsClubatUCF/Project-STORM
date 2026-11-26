@@ -1,0 +1,23 @@
+schema_version: 1
+vlp16:
+  model: Velodyne VLP-16 Puck
+  minimum_range_m: 1.0
+  maximum_range_m: 100.0
+  vertical_fov_deg: 30.0
+  horizontal_fov_deg: 360.0
+  channels: 16
+  source: https://data.ouster.io/downloads/velodyne/user-manual/vlp-16-user-manual-revf.pdf
+  note: One metre is a conservative simulated near blind zone; maximum is per-model, not VLP-family advertising.
+zed:
+  model: Original Stereolabs ZED
+  minimum_depth_m: 0.5
+  maximum_depth_m: 20.0
+  horizontal_fov_deg: 90.0
+  width_px: 672
+  height_px: 376
+  rate_hz: 15.0
+  source: https://cdn.stereolabs.com/assets/datasheets/zed-camera-datasheet.pdf
+  note: Conservative 20 m operating cap; legacy datasheet revisions advertise up to 25 m. Depth is optical-axis distance. Proxy does not reproduce stereo confidence.
+local_obstacles:
+  processing_radius_m: 10.0
+  note: Software crop below lidar capability, not additional sensing range.

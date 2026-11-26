@@ -1,0 +1,5 @@
+<library path="storm_spark_can">
+  <class name="storm_hardware/SparkCanHardware" type="storm_hardware::SparkCanHardware" base_class_type="hardware_interface::SystemInterface">
+    <description>STORM six-wheel SPARK MAX SocketCAN system.</description>
+  </class>
+</library>

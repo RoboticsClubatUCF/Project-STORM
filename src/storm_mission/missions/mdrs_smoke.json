@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "frame": "WGS84",
+  "waypoints": [
+    {"id": "northwest", "latitude": 38.40646734, "longitude": -110.79191422},
+    {"id": "home", "latitude": 38.40645833333333, "longitude": -110.79190277777778}
+  ]
+}

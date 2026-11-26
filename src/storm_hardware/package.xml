@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>storm_hardware</name><version>0.2.0</version>
+  <description>Jazzy ros2_control SystemInterface for STORM SPARK CAN motors.</description>
+  <maintainer email="todo@todo.com">Project STORM maintainers</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+  <depend>storm_sparkcan_vendor</depend>
+  <depend>rclcpp</depend><depend>rclcpp_lifecycle</depend>
+  <depend>hardware_interface</depend><depend>pluginlib</depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>

@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.16)
+project(storm_gazebo)
+find_package(ament_cmake REQUIRED)
+install(DIRECTORY urdf worlds config terrain launch DESTINATION share/${PROJECT_NAME})
+if(BUILD_TESTING)
+  find_package(ament_cmake_pytest REQUIRED)
+  ament_add_pytest_test(sensor_limits test/test_sensor_limits.py)
+endif()
+
+ament_package()
