@@ -1,0 +1,62 @@
+Panels:
+  - Class: rviz_common/Displays
+    Help Height: 78
+  - Class: rviz_common/Views
+    Expanded:
+      - /Current View
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Enabled: true
+      Name: Grid
+      Plane: XY
+      Plane Cell Count: 10
+      Cell Size: 0.1
+      Reference Frame: world
+    - Class: moveit_rviz_plugin/MotionPlanning
+      Enabled: true
+      Name: MotionPlanning
+      Move Group Namespace: ""
+      Planning Scene Topic: /monitored_planning_scene
+      Robot Description: robot_description
+      Planning Request:
+        Planning Group: arm
+        Query Goal State: true
+        Query Start State: false
+      Scene Robot:
+        Show Robot Visual: true
+      Planned Path:
+        Show Robot Visual: true
+  Enabled: true
+  Global Options:
+    Fixed Frame: world
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/Interact
+      Hide Inactive: true
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+    - Class: rviz_default_plugins/SetInitialPose
+    - Class: rviz_default_plugins/SetGoal
+    - Class: rviz_default_plugins/PublishPoint
+      Single click: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 2.5
+      Focal Point:
+        X: 0.55
+        Y: 0.0
+        Z: 0.2
+      Pitch: 0.65
+      Yaw: 0.8
+      Value: Orbit (rviz)
+Window Geometry:
+  Height: 900
+  Width: 1400
+  QMainWindow State: 000000ff00000000fd0000000100000000000001900000035cfc0200000002fb000000160044006900730070006c006100790073000000003d00000269000000c900fffffffb00000028004d006f00740069006f006e0050006c0061006e006e0069006e006700000002b0000001a00000006b00ffffff00000500000005a000000004000000040000000800000008fc00000001

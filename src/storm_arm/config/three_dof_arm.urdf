@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<robot name="storm_arm">
+  <material name="dark_gray">
+    <color rgba="0.22 0.25 0.29 1"/>
+  </material>
+  <material name="blue">
+    <color rgba="0.10 0.38 0.78 1"/>
+  </material>
+  <material name="orange">
+    <color rgba="0.95 0.42 0.12 1"/>
+  </material>
+  <material name="light_gray">
+    <color rgba="0.70 0.74 0.78 1"/>
+  </material>
+
+  <link name="world"/>
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.09"/>
+      <geometry><cylinder radius="0.16" length="0.18"/></geometry>
+      <material name="dark_gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.09"/>
+      <geometry><cylinder radius="0.16" length="0.18"/></geometry>
+    </collision>
+  </link>
+  <link name="shoulder_link">
+    <visual>
+      <origin xyz="0.20 0 0" rpy="0 1.5708 0"/>
+      <geometry><cylinder radius="0.055" length="0.40"/></geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0.20 0 0" rpy="0 1.5708 0"/>
+      <geometry><cylinder radius="0.055" length="0.40"/></geometry>
+    </collision>
+  </link>
+  <link name="upper_arm_link">
+    <visual>
+      <origin xyz="0.18 0 0" rpy="0 1.5708 0"/>
+      <geometry><cylinder radius="0.045" length="0.36"/></geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin xyz="0.18 0 0" rpy="0 1.5708 0"/>
+      <geometry><cylinder radius="0.045" length="0.36"/></geometry>
+    </collision>
+  </link>
+  <link name="forearm_link">
+    <visual>
+      <origin xyz="0.15 0 0" rpy="0 1.5708 0"/>
+      <geometry><cylinder radius="0.038" length="0.30"/></geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0.15 0 0" rpy="0 1.5708 0"/>
+      <geometry><cylinder radius="0.038" length="0.30"/></geometry>
+    </collision>
+  </link>
+  <link name="tool0">
+    <visual>
+      <origin xyz="0.06 0 0"/>
+      <geometry><sphere radius="0.065"/></geometry>
+      <material name="light_gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0.06 0 0"/>
+      <geometry><sphere radius="0.065"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+  </joint>
+  <joint name="base_yaw_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="shoulder_link"/>
+    <origin xyz="0 0 0.18"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14159" upper="3.14159" effort="30" velocity="1.5"/>
+  </joint>
+  <joint name="shoulder_pitch_joint" type="revolute">
+    <parent link="shoulder_link"/>
+    <child link="upper_arm_link"/>
+    <origin xyz="0.40 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.74533" upper="1.74533" effort="30" velocity="1.5"/>
+  </joint>
+  <joint name="elbow_pitch_joint" type="revolute">
+    <parent link="upper_arm_link"/>
+    <child link="forearm_link"/>
+    <origin xyz="0.36 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.35619" upper="2.35619" effort="20" velocity="1.8"/>
+  </joint>
+  <joint name="tool_fixed_joint" type="fixed">
+    <parent link="forearm_link"/>
+    <child link="tool0"/>
+    <origin xyz="0.30 0 0"/>
+  </joint>
+
+  <ros2_control name="FakeArmSystem" type="system">
+    <hardware>
+      <plugin>mock_components/GenericSystem</plugin>
+    </hardware>
+    <joint name="base_yaw_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="shoulder_pitch_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="elbow_pitch_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+</robot>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<robot name="storm_arm">
+  <group name="arm">
+    <chain base_link="base_link" tip_link="tool0"/>
+  </group>
+
+  <group_state name="home" group="arm">
+    <joint name="base_yaw_joint" value="0"/>
+    <joint name="shoulder_pitch_joint" value="0"/>
+    <joint name="elbow_pitch_joint" value="0"/>
+  </group_state>
+  <group_state name="folded" group="arm">
+    <joint name="base_yaw_joint" value="0"/>
+    <joint name="shoulder_pitch_joint" value="0.6"/>
+    <joint name="elbow_pitch_joint" value="-1.2"/>
+  </group_state>
+
+  <disable_collisions link1="base_link" link2="shoulder_link" reason="Adjacent"/>
+  <disable_collisions link1="shoulder_link" link2="upper_arm_link" reason="Adjacent"/>
+  <disable_collisions link1="upper_arm_link" link2="forearm_link" reason="Adjacent"/>
+  <disable_collisions link1="forearm_link" link2="tool0" reason="Adjacent"/>
+</robot>
